@@ -26,6 +26,16 @@ def add_folder():
         groups["new"][folderpath] = foldername
         write_json(groups)
 
+
+def add_group(new_group):
+    groups[new_group] = {}
+    write_json(groups)
+
+def remove_group(group):
+    del groups[group]
+    write_json(groups)
+
+
 def write_json(write_to_json):
     with open ("saved_groups.json", "w") as file:
         json.dump(write_to_json, file, indent=2, ensure_ascii=False)
@@ -50,6 +60,18 @@ def draw_gui():
 
     add_folder_button = tk.Button(text="Add Folder", command=add_folder)
     add_folder_button.place(x=100, y=130)
+
+    add_group_entry = tk.Entry(width=30)
+    add_group_entry.place(x=250, y=70)
+    add_group_button = tk.Button(text="Add File Group", command=lambda:[add_group(add_group_entry.get())])
+    add_group_button.place(x=250, y=100)
+
+    remove_group_button = tk.Button(text="Remove Group", command=lambda:[remove_group(add_group_entry.get())])
+    remove_group_button.place(x=250, y=130)
+
+
+
+
 
     root.mainloop()
 
