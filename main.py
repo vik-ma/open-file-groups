@@ -6,20 +6,29 @@ import json
 
 DESKTOP = pathlib.Path.home() / 'Desktop'
 
+with open ("saved_groups.json", "r", encoding="utf-8") as file:
+    groups = json.load(file)
+
 def add_file():
     filepath = filedialog.askopenfilename(initialdir=DESKTOP, title="Select File", 
                                          filetypes=[("All Files", "*.*")])
     get_filename = filepath.split("/",-2)
     filename = get_filename[-2]+"/"+get_filename[-1]
     if filepath != "":
-        print(filepath+" "+filename)
+        groups["new"][filepath] = filename
+        write_json(groups)
 
 def add_folder():
     folderpath = filedialog.askdirectory(initialdir=DESKTOP, title="Select Folder")
     get_foldername = folderpath.split("/")
     foldername = get_foldername[-1]
     if folderpath != "":
-        print(folderpath+" "+foldername)
+        groups["new"][folderpath] = foldername
+        write_json(groups)
+
+def write_json(write_to_json):
+    with open ("saved_groups.json", "w") as file:
+        json.dump(write_to_json, file, indent=2, ensure_ascii=False)
 
 def draw_gui():
     """Construct the GUI for the application."""
