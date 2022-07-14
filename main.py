@@ -44,7 +44,7 @@ def draw_gui():
     add_group_button = tk.Button(text="Add File Group", command=lambda:[add_group(), update_group_list()])
     add_group_button.place(x=255, y=100)
 
-    remove_group_button = tk.Button(text="Remove Group", command=lambda:[remove_group(get_group_selection()), update_group_list()])
+    remove_group_button = tk.Button(text="Remove Group", command=lambda:[remove_group(get_group_selection()), update_file_list()])
     remove_group_button.place(x=255, y=130)
 
     def add_group():
@@ -60,7 +60,9 @@ def draw_gui():
         if group != None:
             del groups[group]
             write_json(groups)
-            current_group.set(group_listbox.get(group_listbox.curselection()))
+            update_group_list()
+            current_group.set(get_group_selection())
+
 
     def add_file(group):
         filepath = filedialog.askopenfilename(initialdir=DESKTOP, title="Select File", 
@@ -122,7 +124,10 @@ def draw_gui():
 
     def update_file_list():
         if current_group.get() != "":
-            file_list.set([k for k, v in groups[current_group.get()].items()])
+            if current_group.get() in groups:
+                file_list.set([k for k, v in groups[current_group.get()].items()])
+            else:
+                file_list.set([])
 
     def update_group_list():
         group_list.set([group for group in groups])
