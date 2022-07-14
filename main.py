@@ -3,34 +3,14 @@ from tkinter import StringVar, filedialog
 import pathlib
 import os
 import json
+from tkinter import messagebox
 
 DESKTOP = pathlib.Path.home() / 'Desktop'
 
 with open ("saved_groups.json", "r", encoding="utf-8") as file:
     groups = json.load(file)
 
-def add_file():
-    filepath = filedialog.askopenfilename(initialdir=DESKTOP, title="Select File", 
-                                         filetypes=[("All Files", "*.*")])
-    if filepath != "":
-        get_filename = filepath.split("/",-2)
-        filename = get_filename[-2]+"/"+get_filename[-1]
-        groups["new"][filepath] = filename
-        write_json(groups)
 
-def add_folder():
-    folderpath = filedialog.askdirectory(initialdir=DESKTOP, title="Select Folder")
-    if folderpath != "":
-        get_foldername = folderpath.split("/")
-        foldername = get_foldername[-1]
-        groups["new"][folderpath] = foldername
-        write_json(groups)
-
-def remove_entry(entry):
-    if entry != None:
-        get_index = list(groups["new"])
-        del groups["new"][get_index[entry]]
-        write_json(groups)
 
 def add_group(new_group):
     groups[new_group] = {}
@@ -61,13 +41,13 @@ def draw_gui():
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     root.resizable(width=False, height=False)
 
-    add_file_button = tk.Button(text="Add File", command=lambda:[add_file(),update_file_list()])
+    add_file_button = tk.Button(text="Add File", command=lambda:[add_file(current_group.get()),update_file_list()])
     add_file_button.place(x=600, y=100)
 
-    add_folder_button = tk.Button(text="Add Folder", command=lambda:[add_folder(), update_file_list()])
+    add_folder_button = tk.Button(text="Add Folder", command=lambda:[add_folder(current_group.get()), update_file_list()])
     add_folder_button.place(x=600, y=130)
 
-    remove_entry_button = tk.Button(text="Remove Entry", command=lambda:[remove_entry(get_file_selection()),update_file_list()])
+    remove_entry_button = tk.Button(text="Remove Entry", command=lambda:[remove_entry(get_file_selection(),current_group.get()),update_file_list()])
     remove_entry_button.place(x=600, y=160)
 
     add_group_entry = tk.Entry(width=30)
@@ -77,21 +57,69 @@ def draw_gui():
     remove_group_button = tk.Button(text="Remove Group", command=lambda:[remove_group(add_group_entry.get())])
     remove_group_button.place(x=255, y=130)
 
+    def add_file(group):
+        filepath = filedialog.askopenfilename(initialdir=DESKTOP, title="Select File", 
+                                            filetypes=[("All Files", "*.*")])
+        try:
+            if filepath != "":
+                get_filename = filepath.split("/",-2)
+                filename = get_filename[-2]+"/"+get_filename[-1]
+                groups[group][filepath] = filename
+                write_json(groups)
+        except:
+            messagebox.showerror("Error", "Cannot add file if no group is selected!")
 
-    file_list = StringVar(value=[k for k, v in groups["new"].items()])
-    file_listbox = tk.Listbox(listvariable=file_list, width=40, selectmode="SINGLE")
+    def add_folder(group):
+        folderpath = filedialog.askdirectory(initialdir=DESKTOP, title="Select Folder")
+        try:
+            if folderpath != "":
+                get_foldername = folderpath.split("/")
+                foldername = get_foldername[-1]
+                groups[group][folderpath] = foldername
+                write_json(groups)
+        except:
+            messagebox.showerror("Error", "Cannot add folder if no group is selected!")
+
+    def remove_entry(entry, group):
+        if entry != None:
+            get_index = list(groups[group])
+            del groups[group][get_index[entry]]
+            write_json(groups)
+
+
+    file_list = StringVar()
+    file_listbox = tk.Listbox(listvariable=file_list, width=40, selectmode="SINGLE", exportselection=False)
     file_listbox.place(x=350, y=100)
 
-    group_list= StringVar()
-    group_listbox = tk.Listbox(listvariable=group_list, width=40, selectmode="SINGLE")
+    group_list = StringVar(value=[group for group in groups])
+    group_listbox = tk.Listbox(listvariable=group_list, width=40, selectmode="SINGLE", exportselection=True)
     group_listbox.place(x=5, y=100)
+
+    current_group = StringVar()
+
+
+    def group_listbox_on_select(event):
+        e = event.widget
+        group = group_listbox.get(e.curselection())
+        file_list.set([k for k, v in groups[group].items()])
+        current_group.set(group)
+
+    group_listbox.bind('<<ListboxSelect>>', group_listbox_on_select)
+
+    def get_group_selection():
+        if group_listbox.curselection() != ():
+            print(group_listbox.get(group_listbox.curselection()))
 
     def get_file_selection():
         if file_listbox.curselection() != ():
             return file_listbox.curselection()[0]
 
     def update_file_list():
-        file_list.set([k for k, v in groups["new"].items()])
+        if current_group.get() != "":
+            file_list.set([k for k, v in groups[current_group.get()].items()])
+
+    test_button = tk.Button(text="TEST", command=lambda:[get_group_selection()])
+    test_button.place(x=255, y=350)
 
     root.mainloop()
 
