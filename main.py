@@ -15,7 +15,7 @@ def add_file():
     if filepath != "":
         get_filename = filepath.split("/",-2)
         filename = get_filename[-2]+"/"+get_filename[-1]
-        groups["new"][filename] = filepath
+        groups["new"][filepath] = filename
         write_json(groups)
 
 def add_folder():
@@ -23,12 +23,13 @@ def add_folder():
     if folderpath != "":
         get_foldername = folderpath.split("/")
         foldername = get_foldername[-1]
-        groups["new"][foldername] = folderpath
+        groups["new"][folderpath] = foldername
         write_json(groups)
 
 def remove_entry(entry):
     if entry != None:
-        del groups["new"][entry]
+        get_index = list(groups["new"])
+        del groups["new"][get_index[entry]]
         write_json(groups)
 
 def add_group(new_group):
@@ -84,7 +85,7 @@ def draw_gui():
 
     def get_file_selection():
         if file_listbox.curselection() != ():
-            return file_listbox.get(file_listbox.curselection())
+            return file_listbox.curselection()[0]
 
     def update_file_list():
         file_list.set([k for k, v in groups["new"].items()])
