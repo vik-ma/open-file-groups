@@ -62,26 +62,29 @@ def draw_gui():
     root.resizable(width=False, height=False)
 
     add_file_button = tk.Button(text="Add File", command=lambda:[add_file(),update_file_list()])
-    add_file_button.place(x=100, y=100)
+    add_file_button.place(x=600, y=100)
 
     add_folder_button = tk.Button(text="Add Folder", command=lambda:[add_folder(), update_file_list()])
-    add_folder_button.place(x=100, y=130)
+    add_folder_button.place(x=600, y=130)
 
     remove_entry_button = tk.Button(text="Remove Entry", command=lambda:[remove_entry(get_file_selection()),update_file_list()])
-    remove_entry_button.place(x=100, y=160)
+    remove_entry_button.place(x=600, y=160)
 
     add_group_entry = tk.Entry(width=30)
-    add_group_entry.place(x=250, y=70)
+    add_group_entry.place(x=255, y=70)
     add_group_button = tk.Button(text="Add File Group", command=lambda:[add_group(add_group_entry.get())])
-    add_group_button.place(x=250, y=100)
-
+    add_group_button.place(x=255, y=100)
     remove_group_button = tk.Button(text="Remove Group", command=lambda:[remove_group(add_group_entry.get())])
-    remove_group_button.place(x=250, y=130)
+    remove_group_button.place(x=255, y=130)
 
 
     file_list = StringVar(value=[k for k, v in groups["new"].items()])
     file_listbox = tk.Listbox(listvariable=file_list, width=40, selectmode="SINGLE")
-    file_listbox.place(x=450, y=100)
+    file_listbox.place(x=350, y=100)
+
+    group_list= StringVar()
+    group_listbox = tk.Listbox(listvariable=group_list, width=40, selectmode="SINGLE")
+    group_listbox.place(x=5, y=100)
 
     def get_file_selection():
         if file_listbox.curselection() != ():
