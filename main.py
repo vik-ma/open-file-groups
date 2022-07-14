@@ -4,21 +4,12 @@ import pathlib
 import os
 import json
 from tkinter import messagebox
+from tkinter.simpledialog import askstring
 
 DESKTOP = pathlib.Path.home() / 'Desktop'
 
 with open ("saved_groups.json", "r", encoding="utf-8") as file:
     groups = json.load(file)
-
-
-
-def add_group(new_group):
-    groups[new_group] = {}
-    write_json(groups)
-
-def remove_group(group):
-    del groups[group]
-    write_json(groups)
 
 
 
@@ -50,12 +41,26 @@ def draw_gui():
     remove_entry_button = tk.Button(text="Remove Entry", command=lambda:[remove_entry(get_file_selection(),current_group.get()),update_file_list()])
     remove_entry_button.place(x=600, y=160)
 
-    add_group_entry = tk.Entry(width=30)
-    add_group_entry.place(x=255, y=70)
-    add_group_button = tk.Button(text="Add File Group", command=lambda:[add_group(add_group_entry.get())])
+    add_group_button = tk.Button(text="Add File Group", command=lambda:[add_group(), update_group_list()])
     add_group_button.place(x=255, y=100)
-    remove_group_button = tk.Button(text="Remove Group", command=lambda:[remove_group(add_group_entry.get())])
+
+    remove_group_button = tk.Button(text="Remove Group", command=lambda:[remove_group(get_group_selection()), update_group_list()])
     remove_group_button.place(x=255, y=130)
+
+    def add_group():
+        new_group = askstring("New Group", "Name file group:")
+        if new_group != None:
+            if new_group in groups:
+                messagebox.showerror("Error", "A group with that name already exists!")
+            else:
+                groups[new_group] = {}
+                write_json(groups)
+
+    def remove_group(group):
+        if group != None:
+            del groups[group]
+            write_json(groups)
+            current_group.set(group_listbox.get(group_listbox.curselection()))
 
     def add_file(group):
         filepath = filedialog.askopenfilename(initialdir=DESKTOP, title="Select File", 
@@ -100,15 +105,16 @@ def draw_gui():
 
     def group_listbox_on_select(event):
         e = event.widget
-        group = group_listbox.get(e.curselection())
+        group = e.get(e.curselection())
         file_list.set([k for k, v in groups[group].items()])
-        current_group.set(group)
+        current_group.set(e.get(e.curselection()))
+
 
     group_listbox.bind('<<ListboxSelect>>', group_listbox_on_select)
 
     def get_group_selection():
         if group_listbox.curselection() != ():
-            print(group_listbox.get(group_listbox.curselection()))
+            return group_listbox.get(group_listbox.curselection())
 
     def get_file_selection():
         if file_listbox.curselection() != ():
@@ -118,8 +124,15 @@ def draw_gui():
         if current_group.get() != "":
             file_list.set([k for k, v in groups[current_group.get()].items()])
 
-    test_button = tk.Button(text="TEST", command=lambda:[get_group_selection()])
+    def update_group_list():
+        group_list.set([group for group in groups])
+
+    test_button = tk.Button(text="TEST", command=lambda:[testasd()])
     test_button.place(x=255, y=350)
+
+    def testasd():
+        asd = askstring("AAA", "AAAAAAAAAAAAAAAAAAAAAAA")
+        print(asd)
 
     root.mainloop()
 
