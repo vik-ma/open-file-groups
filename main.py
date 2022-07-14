@@ -1,10 +1,10 @@
 import tkinter as tk
-from tkinter import StringVar, filedialog
+from tkinter import StringVar, filedialog, messagebox
+from tkinter.simpledialog import askstring
 import pathlib
 import os
 import json
-from tkinter import messagebox
-from tkinter.simpledialog import askstring
+
 
 DESKTOP = pathlib.Path.home() / 'Desktop'
 
@@ -93,6 +93,12 @@ def draw_gui():
             del groups[group][get_index[entry]]
             write_json(groups)
 
+    current_group = StringVar()
+
+    selected_group_label = tk.Label(text="Selected Group:", font="arial 13 bold")
+    selected_group_label.place(x=350, y=50)
+    current_group_label = tk.Label(textvariable=current_group, font="arial 13 bold", fg="#166edb")
+    current_group_label.place(x=350, y=70)
 
     file_list = StringVar()
     file_listbox = tk.Listbox(listvariable=file_list, width=40, selectmode="SINGLE", exportselection=False)
@@ -102,7 +108,7 @@ def draw_gui():
     group_listbox = tk.Listbox(listvariable=group_list, width=40, selectmode="SINGLE", exportselection=True)
     group_listbox.place(x=5, y=100)
 
-    current_group = StringVar()
+    
 
 
     def group_listbox_on_select(event):
