@@ -104,7 +104,7 @@ def draw_gui():
     file_listbox = tk.Listbox(listvariable=file_list, width=40, selectmode="SINGLE", exportselection=False)
     file_listbox.place(x=350, y=100)
 
-    group_list = StringVar(value=[group for group in groups])
+    group_list = StringVar(value=[group for group in groups][1::])
     group_listbox = tk.Listbox(listvariable=group_list, width=40, selectmode="SINGLE", exportselection=True)
     group_listbox.place(x=5, y=100)
 
@@ -136,13 +136,13 @@ def draw_gui():
                 file_list.set([])
 
     def update_group_list():
-        group_list.set([group for group in groups])
+        group_list.set([group for group in groups][1::])
 
     test_button = tk.Button(text="TEST", command=lambda:[testasd()])
     test_button.place(x=255, y=350)
 
     def testasd():
-        asd = askstring("AAA", "AAAAAAAAAAAAAAAAAAAAAAA")
+        asd = [g for g in groups][1::]
         print(asd)
 
     root.mainloop()
