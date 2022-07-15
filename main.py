@@ -114,7 +114,10 @@ def draw_gui():
     def group_listbox_on_select(event):
         e = event.widget
         group = e.get(e.curselection())
-        file_list.set([k for k, v in groups[group].items()])
+        if toggle_filepath_state.get() is True:
+            file_list.set([k for k, v in groups[group].items()])
+        else:
+            file_list.set([v for k, v in groups[group].items()])
         current_group.set(e.get(e.curselection()))
 
 
@@ -131,7 +134,10 @@ def draw_gui():
     def update_file_list():
         if current_group.get() != "":
             if current_group.get() in groups:
-                file_list.set([k for k, v in groups[current_group.get()].items()])
+                if toggle_filepath_state.get() is True:
+                    file_list.set([k for k, v in groups[current_group.get()].items()])
+                else:
+                    file_list.set([v for k, v in groups[current_group.get()].items()])
             else:
                 file_list.set([])
 
@@ -164,7 +170,7 @@ def draw_gui():
         show_filepath_button(new_state)
         groups["_SETTINGS_"]["show_full_filepath"] = new_state
         write_json(groups)
-
+        update_file_list()
 
 
     test_button = tk.Button(text="TEST", command=lambda:[testasd()])
