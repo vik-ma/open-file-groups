@@ -47,6 +47,8 @@ def draw_gui():
     remove_group_button = tk.Button(text="Remove Group", command=lambda:[remove_group(get_group_selection()), update_file_list()])
     remove_group_button.place(x=255, y=130)
 
+    lastdir = StringVar(value=groups["_SETTINGS_"]["lastdir"])
+
     def add_group():
         new_group = askstring("New Group", "Name file group:")
         if new_group != None:
@@ -65,24 +67,30 @@ def draw_gui():
 
 
     def add_file(group):
-        filepath = filedialog.askopenfilename(initialdir=DESKTOP, title="Select File", 
+        filepath = filedialog.askopenfilename(initialdir=lastdir.get(), title="Select File", 
                                             filetypes=[("All Files", "*.*")])
         try:
             if filepath != "":
-                get_filename = filepath.split("/",-2)
+                get_filename = filepath.split("/")
                 filename = get_filename[-2]+"/"+get_filename[-1]
                 groups[group][filepath] = filename
+                get_dir = filepath.rsplit("/",1)[0]
+                groups["_SETTINGS_"]["lastdir"] = get_dir
+                lastdir.set(get_dir)
                 write_json(groups)
         except:
             messagebox.showerror("Error", "Cannot add file if no group is selected!")
 
     def add_folder(group):
-        folderpath = filedialog.askdirectory(initialdir=DESKTOP, title="Select Folder")
+        folderpath = filedialog.askdirectory(initialdir=lastdir.get(), title="Select Folder")
         try:
             if folderpath != "":
                 get_foldername = folderpath.split("/")
                 foldername = get_foldername[-1]
                 groups[group][folderpath] = foldername
+                get_dir = folderpath.rsplit("/",1)[0]
+                groups["_SETTINGS_"]["lastdir"] = get_dir
+                lastdir.set(get_dir)
                 write_json(groups)
         except:
             messagebox.showerror("Error", "Cannot add folder if no group is selected!")
