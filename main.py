@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import StringVar, filedialog, messagebox
+from tkinter import BooleanVar, StringVar, filedialog, messagebox
 from tkinter.simpledialog import askstring
 import pathlib
 import os
@@ -138,12 +138,48 @@ def draw_gui():
     def update_group_list():
         group_list.set([group for group in groups][1::])
 
+    toggle_filepath_state = BooleanVar()
+    toggle_filepath_state.set(groups["_SETTINGS_"]["show_full_filepath"])
+    
+    toggle_filepath_button_text = StringVar()
+
+    def show_filepath_button(state):
+        if state is True:
+            toggle_filepath_button_text.set("Toggle Shorter Filepath")
+        else:
+            toggle_filepath_button_text.set("Toggle Full Filepath")
+
+    show_filepath_button(toggle_filepath_state.get())
+
+    toggle_filepath_button = tk.Button(textvariable=toggle_filepath_button_text, command=lambda:[toggle_filepath()])
+    toggle_filepath_button.place(x=350, y=270)
+
+    def toggle_filepath():
+        new_state = toggle_filepath_state.get()
+        if new_state is True:
+            new_state = False
+        else:
+            new_state = True
+        toggle_filepath_state.set(new_state)
+        show_filepath_button(new_state)
+        groups["_SETTINGS_"]["show_full_filepath"] = new_state
+        write_json(groups)
+
+
+
     test_button = tk.Button(text="TEST", command=lambda:[testasd()])
     test_button.place(x=255, y=350)
 
     def testasd():
-        asd = [g for g in groups][1::]
-        print(asd)
+        asd = groups["_SETTINGS_"]["test"]
+        if asd is True:
+            groups["_SETTINGS_"]["test"] = False
+        else:
+            groups["_SETTINGS_"]["test"] = True
+
+        write_json(groups)
+
+        
 
     root.mainloop()
 
