@@ -180,18 +180,24 @@ def draw_gui():
         write_json(groups)
         update_file_list()
 
+    def open_files():
+        group = current_group.get()
+        if group != "None" and group != "":
+            for k, v in groups[group].items():
+                os.startfile(k)
+        else:
+            messagebox.showerror("Error", "Must select a group to open from!")
+
+    open_button = tk.Button(text="Open Files", bg="#3599e6", fg="#1c1c1c", 
+                            font="arial 18 bold", command=open_files)
+    open_button.place(x=550, y=5)
 
     test_button = tk.Button(text="TEST", command=lambda:[testasd()])
-    test_button.place(x=255, y=350)
+    test_button.place(x=50, y=30)
+
 
     def testasd():
-        asd = groups["_SETTINGS_"]["test"]
-        if asd is True:
-            groups["_SETTINGS_"]["test"] = False
-        else:
-            groups["_SETTINGS_"]["test"] = True
-
-        write_json(groups)
+        print(current_group.get())
 
         
 
