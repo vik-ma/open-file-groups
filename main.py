@@ -5,12 +5,9 @@ import pathlib
 import os
 import json
 
-
 DESKTOP = pathlib.Path.home() / 'Desktop'
 
-with open ("saved_groups.json", "r", encoding="utf-8") as file:
-    groups = json.load(file)
-
+has_json = pathlib.Path("saved_groups.json").exists()
 
 
 def write_json(write_to_json):
@@ -101,7 +98,7 @@ def draw_gui():
             del groups[group][get_index[entry]]
             write_json(groups)
 
-    current_group = StringVar()
+    current_group = StringVar(value="None")
 
     selected_group_label = tk.Label(text="Selected Group:", font="arial 13 bold")
     selected_group_label.place(x=350, y=50)
@@ -199,8 +196,23 @@ def draw_gui():
     def testasd():
         print(current_group.get())
 
-        
-
     root.mainloop()
 
-draw_gui()
+
+
+if has_json:
+    with open ("saved_groups.json", "r", encoding="utf-8") as file:
+        groups = json.load(file)
+    draw_gui()
+else:
+    settings = {
+        "show_full_filepath": True,
+        "lastdir": str(DESKTOP)
+        }
+    json_content = {"_SETTINGS_":settings}
+    write_json(json_content)
+    with open ("saved_groups.json", "r", encoding="utf-8") as file:
+        groups = json.load(file)
+    draw_gui()
+
+#draw_gui()
