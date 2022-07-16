@@ -156,17 +156,20 @@ def draw_gui():
     move_group_up_button = tk.Button(text="Move Group Up", command=lambda:[move_group_up(get_group_index())])
     move_group_up_button.place(x=255, y=160)
 
-    def move_group_up(lower):
-        lower_int = lower[0]
-        if (lower != None):
-            upper_int = lower_int-1
+    move_group_down_button = tk.Button(text="Move Group Down", command=lambda:[move_group_down(get_group_index())])
+    move_group_down_button.place(x=255, y=190)
 
+    def move_group_up(lower):
+        if (lower != None):
+            lower_int = lower[0]
+            upper_int = lower_int-1
             if (lower_int > 0):
                 temp_list = []
                 for k, v in groups.items():
                     temp_list.append([k,v])
+                
                 temp_list[upper_int+1], temp_list[lower_int+1] = temp_list[lower_int+1], temp_list[upper_int+1]
-
+                
                 for t in temp_list:
                     del groups[t[0]]
                     groups[t[0]] = t[1]
@@ -174,12 +177,36 @@ def draw_gui():
                 write_json(groups)
                 update_group_list()
                 listbox_update_selection("Group", upper_int)
+    
+    def move_group_down(upper):
+        if (upper != None):
+            upper_int = upper[0]
+            lower_int = upper_int+1
+            if (upper_int < len(groups)-2):
+                temp_list = []
+                for k, v in groups.items():
+                    temp_list.append([k,v])
+
+                temp_list[upper_int+1], temp_list[lower_int+1] = temp_list[lower_int+1], temp_list[upper_int+1]
+
+                for t in temp_list:
+                    del groups[t[0]]
+                    groups[t[0]] = t[1] 
+                
+                write_json(groups)
+                update_group_list()
+                listbox_update_selection("Group", lower_int)
+
+    
+
 
     def listbox_update_selection(list_type, index):
         if list_type == "Group":
-                group_listbox.select_clear(0, tk.END)
-                group_listbox.select_set(index)
-
+            group_listbox.select_clear(0, tk.END)
+            group_listbox.select_set(index)
+        if list_type == "Files":
+            file_listbox.select_clear(0, tk.END)
+            file_listbox.select_set(index)
 
 
 
@@ -228,7 +255,7 @@ def draw_gui():
 
 
     def testasd():
-        print(get_group_index())
+        print(len(groups))
 
     root.mainloop()
 
