@@ -159,6 +159,12 @@ def draw_gui():
     move_group_down_button = tk.Button(text="Move Group Down", command=lambda:[move_group_down(get_group_index())])
     move_group_down_button.place(x=255, y=190)
 
+    move_file_up_button = tk.Button(text="Move File Up", command=lambda:[move_file_up(get_file_selection(), get_group_selection())])
+    move_file_up_button.place(x=600, y=190)
+
+    move_file_down_button = tk.Button(text="Move File Down", command=lambda:[move_file_down(get_file_selection(), get_group_selection())])
+    move_file_down_button.place(x=600, y=220)
+
     def move_group_up(lower):
         if (lower != None):
             lower_int = lower[0]
@@ -186,6 +192,32 @@ def draw_gui():
         write_json(groups)
         update_group_list()
 
+    def move_file_up(lower, group):
+        if (lower != None and group != None):
+            lower_int = lower
+            upper_int = lower_int-1
+            if (lower_int > 0):
+                change_file_position(upper_int, lower_int, group)
+                listbox_update_selection("Files", upper_int)
+
+    def move_file_down(upper, group):
+        if (upper != None and group != None):
+            upper_int = upper
+            lower_int = upper_int+1
+            if (upper_int < len(groups[group])-1):
+                change_file_position(upper_int, lower_int, group)
+                listbox_update_selection("Files", lower_int)
+
+    def change_file_position(upper_int, lower_int, group):
+        temp_list = []
+        for k, v in groups[group].items():
+            temp_list.append([k,v])
+        temp_list[upper_int], temp_list[lower_int] = temp_list[lower_int], temp_list[upper_int]
+        for t in temp_list:
+            del groups[group][t[0]]
+            groups[group][t[0]] = t[1] 
+        write_json(groups)
+        update_file_list()
 
     def listbox_update_selection(list_type, index):
         if list_type == "Group":
@@ -242,7 +274,7 @@ def draw_gui():
 
 
     def testasd():
-        print(len(groups))
+        print(get_group_selection(), current_group.get())
 
     root.mainloop()
 
