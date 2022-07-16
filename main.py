@@ -106,11 +106,11 @@ def draw_gui():
     current_group_label.place(x=350, y=70)
 
     file_list = StringVar()
-    file_listbox = tk.Listbox(listvariable=file_list, width=40, selectmode="SINGLE", exportselection=False)
+    file_listbox = tk.Listbox(listvariable=file_list, width=40, selectmode="SINGLE", exportselection=False, activestyle="none")
     file_listbox.place(x=350, y=100)
 
     group_list = StringVar(value=[group for group in groups][1::])
-    group_listbox = tk.Listbox(listvariable=group_list, width=40, selectmode="SINGLE", exportselection=True)
+    group_listbox = tk.Listbox(listvariable=group_list, width=40, selectmode="SINGLE", exportselection=True, activestyle="none")
     group_listbox.place(x=5, y=100)
 
     
@@ -136,6 +136,10 @@ def draw_gui():
         if file_listbox.curselection() != ():
             return file_listbox.curselection()[0]
 
+    def get_group_index():
+        if group_listbox.curselection() != ():
+            return group_listbox.curselection()
+
     def update_file_list():
         if current_group.get() != "":
             if current_group.get() in groups:
@@ -148,6 +152,36 @@ def draw_gui():
 
     def update_group_list():
         group_list.set([group for group in groups][1::])
+
+    move_group_up_button = tk.Button(text="Move Group Up", command=lambda:[move_group_up(get_group_index())])
+    move_group_up_button.place(x=255, y=160)
+
+    def move_group_up(lower):
+        lower_int = lower[0]
+        if (lower != None):
+            upper_int = lower_int-1
+
+            if (lower_int > 0):
+                temp_list = []
+                for k, v in groups.items():
+                    temp_list.append([k,v])
+                temp_list[upper_int+1], temp_list[lower_int+1] = temp_list[lower_int+1], temp_list[upper_int+1]
+
+                for t in temp_list:
+                    del groups[t[0]]
+                    groups[t[0]] = t[1]
+
+                write_json(groups)
+                update_group_list()
+                listbox_update_selection("Group", upper_int)
+
+    def listbox_update_selection(list_type, index):
+        if list_type == "Group":
+                group_listbox.select_clear(0, tk.END)
+                group_listbox.select_set(index)
+
+
+
 
     toggle_filepath_state = BooleanVar()
     toggle_filepath_state.set(groups["_SETTINGS_"]["show_full_filepath"])
@@ -194,7 +228,7 @@ def draw_gui():
 
 
     def testasd():
-        print(current_group.get())
+        print(get_group_index())
 
     root.mainloop()
 
