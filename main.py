@@ -261,7 +261,10 @@ def draw_gui():
         group = current_group.get()
         if group != "None" and group != "":
             for k, v in groups[group].items():
-                os.startfile(k)
+                try:
+                    os.startfile(k)
+                except:
+                    messagebox.showerror("Error", f"Cannot open {k}!")
         else:
             messagebox.showerror("Error", "Must select a group to open from!")
 
