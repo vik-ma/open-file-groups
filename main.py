@@ -57,9 +57,9 @@ def draw_gui():
                 write_json(groups)
 
     def remove_group(group):
-        msgbox_warning = messagebox.askquestion("Warning", f"Do you really want to delete {group}?")
-        if msgbox_warning == "yes":  
-            if group != None:
+        if group != None:
+            msgbox_warning = messagebox.askquestion("Warning", f"Do you really want to delete {group}?")
+            if msgbox_warning == "yes":
                 del groups[group]
                 write_json(groups)
                 update_group_list()
@@ -98,8 +98,11 @@ def draw_gui():
     def remove_entry(entry, group):
         if entry != None:
             get_index = list(groups[group])
-            del groups[group][get_index[entry]]
-            write_json(groups)
+            get_entry = groups[group][get_index[entry]]
+            msgbox_warning = messagebox.askquestion("Warning", f"Do you really want to remove {get_entry}?")
+            if msgbox_warning == "yes":
+                del groups[group][get_index[entry]]
+                write_json(groups)
 
     current_group = StringVar(value="None")
 
