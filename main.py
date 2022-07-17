@@ -275,12 +275,25 @@ def draw_gui():
                             font="arial 18 bold", command=open_files)
     open_button.place(x=550, y=5)
 
-    def check_vlcrc():
-        path = groups["_SETTINGS_"]["vlcrc_path"]
+    def check_vlcrc(path):
         if pathlib.Path(path).exists():
             return True
         else:
             return False
+
+    def change_vlcrc_settings(path, setting, newvalue, oldvalue):
+        try:
+            newsetting = setting+str(newvalue)
+            oldsetting = setting+str(oldvalue)
+            with open (path, "r") as f:
+                lines = []
+                for f in f.readlines():
+                    lines.append(f.replace(oldsetting,newsetting))
+            with open (path, "w") as f:
+                for line in lines:
+                    f.writelines(line)
+        except:
+            messagebox.showerror("Error", "VLC settings file can not be read or modified!")
 
 
     test_button = tk.Button(text="TEST", command=lambda:[testasd()])
@@ -288,10 +301,14 @@ def draw_gui():
 
 
     def testasd():
-        if check_vlcrc():
-            messagebox.showinfo("yes", "yesa")
+        path = groups["_SETTINGS_"]["vlcrc_path"]
+        setting = "start-paused="
+        oldvalue = 0
+        newvalue = 1
+        if check_vlcrc(path):
+            change_vlcrc_settings(path, setting, newvalue, oldvalue)
         else:  
-            print("no")
+            messagebox.showerror("Error", "wwwwR")
 
 
     root.mainloop()
