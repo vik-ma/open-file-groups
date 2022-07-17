@@ -67,9 +67,9 @@ def draw_gui():
 
 
     def add_file(group):
-        filepath = filedialog.askopenfilename(initialdir=lastdir.get(), title="Select File", 
-                                            filetypes=[("All Files", "*.*")])
-        try:
+        if get_group_selection() != None:
+            filepath = filedialog.askopenfilename(initialdir=lastdir.get(), title="Select File", 
+                                                filetypes=[("All Files", "*.*")])
             if filepath != "":
                 get_filename = filepath.split("/")
                 filename = get_filename[-2]+"/"+get_filename[-1]
@@ -78,12 +78,12 @@ def draw_gui():
                 groups["_SETTINGS_"]["lastdir"] = get_dir
                 lastdir.set(get_dir)
                 write_json(groups)
-        except:
+        else:
             messagebox.showerror("Error", "Cannot add file if no group is selected!")
 
     def add_folder(group):
-        folderpath = filedialog.askdirectory(initialdir=lastdir.get(), title="Select Folder")
-        try:
+        if get_group_selection() != None:
+            folderpath = filedialog.askdirectory(initialdir=lastdir.get(), title="Select Folder")
             if folderpath != "":
                 get_foldername = folderpath.split("/")
                 foldername = get_foldername[-1]
@@ -92,7 +92,7 @@ def draw_gui():
                 groups["_SETTINGS_"]["lastdir"] = get_dir
                 lastdir.set(get_dir)
                 write_json(groups)
-        except:
+        else:
             messagebox.showerror("Error", "Cannot add folder if no group is selected!")
 
     def remove_entry(entry, group):
@@ -356,15 +356,8 @@ def draw_gui():
 
 
     def testasd():
-        path = groups["_SETTINGS_"]["vlcrc_path"]
-        setting = "start-paused="
-        oldvalue = 1
-        newvalue = 0
-        print(check_vlcrc(path))
-        #if check_vlcrc(path):
-        #    change_vlcrc_settings(path, setting, newvalue, oldvalue)
-        #else:  
-        #    messagebox.showerror("Error", "wwwwR")
+        print(get_group_selection())
+
 
 
     root.mainloop()
