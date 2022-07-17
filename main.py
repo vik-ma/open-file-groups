@@ -6,6 +6,7 @@ import os
 import json
 
 DESKTOP = pathlib.Path.home() / 'Desktop'
+HOMEFOLDER = pathlib.Path.home()
 
 has_json = pathlib.Path("saved_groups.json").exists()
 
@@ -274,12 +275,24 @@ def draw_gui():
                             font="arial 18 bold", command=open_files)
     open_button.place(x=550, y=5)
 
+    def check_vlcrc():
+        path = groups["_SETTINGS_"]["vlcrc_path"]
+        if pathlib.Path(path).exists():
+            return True
+        else:
+            return False
+
+
     test_button = tk.Button(text="TEST", command=lambda:[testasd()])
     test_button.place(x=50, y=30)
 
 
     def testasd():
-        print(get_group_selection(), current_group.get())
+        if check_vlcrc():
+            messagebox.showinfo("yes", "yesa")
+        else:  
+            print("no")
+
 
     root.mainloop()
 
@@ -290,9 +303,11 @@ if has_json:
         groups = json.load(file)
     draw_gui()
 else:
+    vlcrc = f"{HOMEFOLDER}\\AppData\\Roaming\\vlc\\vlcrc"
     settings = {
         "show_full_filepath": True,
-        "lastdir": str(DESKTOP)
+        "lastdir": str(DESKTOP),
+        "vlcrc_path": vlcrc
         }
     json_content = {"_SETTINGS_":settings}
     write_json(json_content)
