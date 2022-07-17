@@ -294,28 +294,56 @@ def draw_gui():
         except:
             messagebox.showerror("Error", "VLC settings file can not be read or modified!")
 
-    def vlc_change_command(setting, newvalue=None, oldvalue=None):
+    def check_vlcrc_settings(path, setting):
+        try:
+            with open (path, "r") as f:
+                for f in f.readlines():
+                    if setting in f:
+                        value = f
+            value = value.strip()[-1]
+            match setting:
+                case "start-paused=":
+                    setting_str = "Start Paused"
+                case "one-instance-when-started-from-file=":
+                    setting_str = "Allow Multiple Instances"
+            match value:
+                case "1":
+                    value_str = "ON"
+                case "0":
+                    value_str = "OFF"
+            messagebox.showinfo("Check Setting", f"{setting_str} is turned {value_str}.")
+
+        except:
+            messagebox.showerror("Error", "VLC settings file can not be read!")
+
+    def vlc_button_command(setting, newvalue=None, oldvalue=None):
         path = groups["_SETTINGS_"]["vlcrc_path"]
         if check_vlcrc(path):
-            change_vlcrc_settings(path, setting, newvalue, oldvalue)
+            if newvalue != None:
+                change_vlcrc_settings(path, setting, newvalue, oldvalue)
+            else:
+                check_vlcrc_settings(path, setting)
         else:  
-            messagebox.showerror("Error", "VLC settings file not found! Click Add Custom Path to manually select vlcrc file.")
+            messagebox.showerror("Error", "VLC settings file not found! Click Add Custom Path to manually select VLC settings file.")
 
-    vlc_pause_on_button = tk.Button(text="Pause On", command=lambda:[vlc_change_command("start-paused=", 1, 0)])
-    vlc_pause_off_button = tk.Button(text="Pause Off", command=lambda:[vlc_change_command("start-paused=", 0, 1)])
+    vlc_paused = "start-paused="
+    vlc_mult_inst = "one-instance-when-started-from-file="
 
-    vlc_multiple_on_button = tk.Button(text="Mult On", 
-                                       command=lambda:[vlc_change_command("one-instance-when-started-from-file=", 0, 1)])
-    vlc_multiple_off_button = tk.Button(text="Mult Off", 
-                                       command=lambda:[vlc_change_command("one-instance-when-started-from-file=", 1, 0)])
+    vlc_pause_on_button = tk.Button(text="Pause On", command=lambda:[vlc_button_command(vlc_paused, 1, 0)])
+    vlc_pause_off_button = tk.Button(text="Pause Off", command=lambda:[vlc_button_command(vlc_paused, 0, 1)])
+
+    vlc_multiple_on_button = tk.Button(text="Mult On", command=lambda:[vlc_button_command(vlc_mult_inst, 0, 1)])
+    vlc_multiple_off_button = tk.Button(text="Mult Off", command=lambda:[vlc_button_command(vlc_mult_inst, 1, 0)])
 
     vlc_pause_on_button.place(x=5, y=300)
     vlc_pause_off_button.place(x=75, y=300)
     vlc_multiple_on_button.place(x=5, y=330)
     vlc_multiple_off_button.place(x=75, y=330)
 
-    vlc_check_pause_button = tk.Button(text="Check Pause", command=lambda:[])
-    vlc_check_multiple_button = tk.Button(text="Check Mult", command=lambda:[])
+    vlc_check_pause_button = tk.Button(text="Check Pause", command=lambda:[vlc_button_command(vlc_paused)])
+    vlc_check_pause_button.place(x=5, y=360)
+    vlc_check_multiple_button = tk.Button(text="Check Mult", command=lambda:[vlc_button_command(vlc_mult_inst)])
+    vlc_check_multiple_button.place(x=120, y=360)
 
     vlc_check_vlcrc_button = tk.Button(text="Check if vlcrc file exists")
     vlc_add_vlcrc_button = tk.Button(text="Add Custom Path")
