@@ -278,8 +278,7 @@ def draw_gui():
     def check_vlcrc(path):
         if pathlib.Path(path).exists():
             return True
-        else:
-            return False
+        return False
 
     def change_vlcrc_settings(path, setting, newvalue, oldvalue):
         try:
@@ -295,6 +294,34 @@ def draw_gui():
         except:
             messagebox.showerror("Error", "VLC settings file can not be read or modified!")
 
+    def vlc_change_command(setting, newvalue=None, oldvalue=None):
+        path = groups["_SETTINGS_"]["vlcrc_path"]
+        if check_vlcrc(path):
+            change_vlcrc_settings(path, setting, newvalue, oldvalue)
+        else:  
+            messagebox.showerror("Error", "VLC settings file not found! Click Add Custom Path to manually select vlcrc file.")
+
+    vlc_pause_on_button = tk.Button(text="Pause On", command=lambda:[vlc_change_command("start-paused=", 1, 0)])
+    vlc_pause_off_button = tk.Button(text="Pause Off", command=lambda:[vlc_change_command("start-paused=", 0, 1)])
+
+    vlc_multiple_on_button = tk.Button(text="Mult On", 
+                                       command=lambda:[vlc_change_command("one-instance-when-started-from-file=", 0, 1)])
+    vlc_multiple_off_button = tk.Button(text="Mult Off", 
+                                       command=lambda:[vlc_change_command("one-instance-when-started-from-file=", 1, 0)])
+
+    vlc_pause_on_button.place(x=5, y=300)
+    vlc_pause_off_button.place(x=75, y=300)
+    vlc_multiple_on_button.place(x=5, y=330)
+    vlc_multiple_off_button.place(x=75, y=330)
+
+    vlc_check_pause_button = tk.Button(text="Check Pause", command=lambda:[])
+    vlc_check_multiple_button = tk.Button(text="Check Mult", command=lambda:[])
+
+    vlc_check_vlcrc_button = tk.Button(text="Check if vlcrc file exists")
+    vlc_add_vlcrc_button = tk.Button(text="Add Custom Path")
+    vlc_restore_vlcrc_button = tk.Button(text="Restore Default Path")
+
+
 
     test_button = tk.Button(text="TEST", command=lambda:[testasd()])
     test_button.place(x=50, y=30)
@@ -303,12 +330,13 @@ def draw_gui():
     def testasd():
         path = groups["_SETTINGS_"]["vlcrc_path"]
         setting = "start-paused="
-        oldvalue = 0
-        newvalue = 1
-        if check_vlcrc(path):
-            change_vlcrc_settings(path, setting, newvalue, oldvalue)
-        else:  
-            messagebox.showerror("Error", "wwwwR")
+        oldvalue = 1
+        newvalue = 0
+        print(check_vlcrc(path))
+        #if check_vlcrc(path):
+        #    change_vlcrc_settings(path, setting, newvalue, oldvalue)
+        #else:  
+        #    messagebox.showerror("Error", "wwwwR")
 
 
     root.mainloop()
