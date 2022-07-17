@@ -56,11 +56,13 @@ def draw_gui():
                 write_json(groups)
 
     def remove_group(group):
-        if group != None:
-            del groups[group]
-            write_json(groups)
-            update_group_list()
-            current_group.set(get_group_selection())
+        msgbox_warning = messagebox.askquestion("Warning", f"Do you really want to delete {group}?")
+        if msgbox_warning == "yes":  
+            if group != None:
+                del groups[group]
+                write_json(groups)
+                update_group_list()
+                current_group.set(get_group_selection())
 
 
     def add_file(group):
