@@ -308,7 +308,7 @@ def draw_gui():
                 case "start-paused=":
                     setting_str = "Start Paused"
                 case "one-instance-when-started-from-file=":
-                    setting_str = "Allow Multiple Instances"
+                    setting_str = "Only Allow One Instance"
             match value:
                 case "1":
                     value_str = "ON"
@@ -335,8 +335,8 @@ def draw_gui():
     vlc_pause_on_button = tk.Button(text="Pause On", command=lambda:[vlc_button_command(vlc_paused, 1, 0)])
     vlc_pause_off_button = tk.Button(text="Pause Off", command=lambda:[vlc_button_command(vlc_paused, 0, 1)])
 
-    vlc_multiple_on_button = tk.Button(text="Mult On", command=lambda:[vlc_button_command(vlc_mult_inst, 0, 1)])
-    vlc_multiple_off_button = tk.Button(text="Mult Off", command=lambda:[vlc_button_command(vlc_mult_inst, 1, 0)])
+    vlc_multiple_on_button = tk.Button(text="Mult On", command=lambda:[vlc_button_command(vlc_mult_inst, 1, 0)])
+    vlc_multiple_off_button = tk.Button(text="Mult Off", command=lambda:[vlc_button_command(vlc_mult_inst, 0, 1)])
 
     vlc_pause_on_button.place(x=5, y=300)
     vlc_pause_off_button.place(x=75, y=300)
