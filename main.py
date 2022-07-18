@@ -165,6 +165,9 @@ def draw_gui():
     move_group_down_button = tk.Button(text="Move Group Down", command=lambda:[move_group_down(get_group_index())])
     move_group_down_button.place(x=255, y=190)
 
+    rename_group_button = tk.Button(text="Rename Group", command=lambda:[rename_group(get_group_selection())])
+    rename_group_button.place(x=255, y=220)
+
     move_file_up_button = tk.Button(text="Move File Up", command=lambda:[move_file_up(get_file_selection(), get_group_selection())])
     move_file_up_button.place(x=600, y=190)
 
@@ -197,6 +200,22 @@ def draw_gui():
             groups[t[0]] = t[1] 
         write_json(groups)
         update_group_list()
+
+    def rename_group(group):
+        if group != None:
+            new_group = askstring("New Group", "Name file group:")
+            if new_group in groups:
+                messagebox.showerror("Error", "A group with that name already exists!")
+            else:
+                storevalue = groups[group]
+                del groups[group]
+                groups[new_group] = storevalue
+                write_json(groups)
+                update_group_list()
+                listbox_update_selection("Group", len(groups)-2)
+
+
+
 
     def move_file_up(lower, group):
         if (lower != None and group != None):
