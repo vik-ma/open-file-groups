@@ -119,8 +119,6 @@ def draw_gui():
     group_listbox = tk.Listbox(listvariable=group_list, width=40, selectmode="SINGLE", exportselection=True, activestyle="none")
     group_listbox.place(x=5, y=100)
 
-    
-
 
     def group_listbox_on_select(event):
         e = event.widget
@@ -214,9 +212,6 @@ def draw_gui():
                 update_group_list()
                 listbox_update_selection("Group", len(groups)-2)
 
-
-
-
     def move_file_up(lower, group):
         if (lower != None and group != None):
             lower_int = lower
@@ -251,8 +246,6 @@ def draw_gui():
         if list_type == "Files":
             file_listbox.select_clear(0, tk.END)
             file_listbox.select_set(index)
-
-
 
     toggle_filepath_state = BooleanVar()
     toggle_filepath_state.set(groups["_SETTINGS_"]["show_full_filepath"])
@@ -301,6 +294,13 @@ def draw_gui():
         if pathlib.Path(path).exists():
             return True
         return False
+
+    def check_vlrc_exists():
+        path = groups["_SETTINGS_"]["vlcrc_path"]
+        if check_vlcrc(path):
+            messagebox.showinfo("VLC Settings File", "VLC Settings File exists in current directory.")
+        else:
+            messagebox.showinfo("VLC Settings File", "VLC Settings File does not exist in current directory. Click Add Custom Path to manually locate 'vlcrc' file.")
 
     def change_vlcrc_settings(path, setting, newvalue, oldvalue):
         try:
@@ -367,9 +367,12 @@ def draw_gui():
     vlc_check_multiple_button = tk.Button(text="Check Mult", command=lambda:[vlc_button_command(vlc_mult_inst)])
     vlc_check_multiple_button.place(x=120, y=360)
 
-    vlc_check_vlcrc_button = tk.Button(text="Check if vlcrc file exists")
+    vlc_check_vlcrc_button = tk.Button(text="Check if vlcrc file exists", command=check_vlrc_exists)
+    vlc_check_vlcrc_button.place(x=250, y=300)
     vlc_add_vlcrc_button = tk.Button(text="Add Custom Path")
+    vlc_add_vlcrc_button.place(x=250, y=330)
     vlc_restore_vlcrc_button = tk.Button(text="Restore Default Path")
+    vlc_restore_vlcrc_button.place(x=250, y=360)
 
 
 
