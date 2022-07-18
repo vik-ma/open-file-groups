@@ -338,6 +338,20 @@ def draw_gui():
         except:
             messagebox.showerror("Error", "VLC settings file can not be read!")
 
+    def vlcrc_select_dir():
+        filepath = filedialog.askopenfilename(initialdir="/", title="Select vlcrc File", 
+                                                filetypes=[("All Files", "*.*")])
+        if filepath != "":
+            groups["_SETTINGS_"]["vlcrc_path"] = filepath
+            print(filepath)
+            write_json(groups)
+    
+    def vlcrc_restore():
+        msgbox_warning = messagebox.askquestion("Warning", f"Do you really want to restore default vlcrc path?")
+        if msgbox_warning == "yes":
+            groups["_SETTINGS_"]["vlcrc_path"] = f"{HOMEFOLDER}\\AppData\\Roaming\\vlc\\vlcrc"
+            write_json(groups)
+
     def vlc_button_command(setting, newvalue=None, oldvalue=None):
         path = groups["_SETTINGS_"]["vlcrc_path"]
         if check_vlcrc(path):
@@ -369,9 +383,9 @@ def draw_gui():
 
     vlc_check_vlcrc_button = tk.Button(text="Check if vlcrc file exists", command=check_vlrc_exists)
     vlc_check_vlcrc_button.place(x=250, y=300)
-    vlc_add_vlcrc_button = tk.Button(text="Add Custom Path")
+    vlc_add_vlcrc_button = tk.Button(text="Add Custom Path", command=vlcrc_select_dir)
     vlc_add_vlcrc_button.place(x=250, y=330)
-    vlc_restore_vlcrc_button = tk.Button(text="Restore Default Path")
+    vlc_restore_vlcrc_button = tk.Button(text="Restore Default Path", command=vlcrc_restore)
     vlc_restore_vlcrc_button.place(x=250, y=360)
 
 
