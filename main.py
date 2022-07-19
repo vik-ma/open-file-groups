@@ -225,9 +225,7 @@ def draw_gui():
                 listbox_update_selection("Group", lower_int)
 
     def change_group_position(upper_int, lower_int):
-        temp_list = []
-        for k, v in groups.items():
-            temp_list.append([k,v])
+        temp_list = [[k,v] for k,v in groups.items()]
         temp_list[upper_int+1], temp_list[lower_int+1] = temp_list[lower_int+1], temp_list[upper_int+1]
         for t in temp_list:
             del groups[t[0]]
@@ -265,9 +263,7 @@ def draw_gui():
                 listbox_update_selection("Files", lower_int)
 
     def change_file_position(upper_int, lower_int, group):
-        temp_list = []
-        for k, v in groups[group].items():
-            temp_list.append([k,v])
+        temp_list = [[k,v] for k,v in groups[group].items()]
         temp_list[upper_int], temp_list[lower_int] = temp_list[lower_int], temp_list[upper_int]
         for t in temp_list:
             del groups[group][t[0]]
