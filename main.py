@@ -1,5 +1,3 @@
-from enum import auto
-from operator import index
 import tkinter as tk
 from tkinter import BooleanVar, StringVar, filedialog, messagebox
 from tkinter.simpledialog import askstring
