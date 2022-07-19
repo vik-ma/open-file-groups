@@ -398,6 +398,8 @@ def draw_gui():
     vlc_restore_vlcrc_button = tk.Button(text="Restore Default Path", command=vlcrc_restore)
     vlc_restore_vlcrc_button.place(x=250, y=360)
 
+
+
     def select_saved_group():
         if current_group.get() != None or current_group.get() != "None":
             index = -1
@@ -432,7 +434,11 @@ else:
         "show_full_filepath": True,
         "lastdir": str(DESKTOP),
         "vlcrc_path": vlcrc,
-        "saved_group": "None"
+        "saved_group": "None",
+        "save_group": False,
+        "autoclose": False,
+        "remove_warn_group": False,
+        "remove_warn_file": True
         }
     json_content = {"_SETTINGS_":settings}
     write_json(json_content)
