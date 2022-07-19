@@ -34,10 +34,10 @@ def draw_gui():
     gbw = 120
     fbw = 100
 
-    add_group_button = tk.Button(text="Add File Group", command=lambda:[add_group(), update_group_list()])
+    add_group_button = tk.Button(text="Create New Group", command=lambda:[add_group(), update_group_list()])
     add_group_button.place(x=195, y=100, width=gbw)
 
-    remove_group_button = tk.Button(text="Remove Group", command=lambda:[remove_group(get_group_selection()), update_file_list()])
+    remove_group_button = tk.Button(text="Delete Group", command=lambda:[remove_group(get_group_selection()), update_file_list()])
     remove_group_button.place(x=195, y=130, width=gbw)
 
     move_group_up_button = tk.Button(text="Move Group Up", command=lambda:[move_group_up(get_group_index())])
@@ -64,6 +64,20 @@ def draw_gui():
     move_file_down_button = tk.Button(text="Move File Down", command=lambda:[move_file_down(get_file_selection(), get_group_selection())])
     move_file_down_button.place(x=580, y=220, width=fbw)
 
+    autoclose = tk.BooleanVar(value=groups["_SETTINGS_"]["autoclose"])
+    save_group = tk.BooleanVar(value=groups["_SETTINGS_"]["save_group"])
+    remove_warn_group = tk.BooleanVar(value=groups["_SETTINGS_"]["remove_warn_group"])
+    remove_warn_files = tk.BooleanVar(value=groups["_SETTINGS_"]["remove_warn_files"])
+
+    autoclose_checkbox = tk.Checkbutton(text="Close Program After Opening", variable=autoclose, onvalue=True, offvalue=False)
+    save_group_checkbox = tk.Checkbutton(text="Automatically select current group next time program is opened", variable=save_group, onvalue=True, offvalue=False)
+    warn_group_checkbox = tk.Checkbutton(text="Warn before trying to delete group", variable=remove_warn_group, onvalue=True, offvalue=False)
+    warn_files_checkbox = tk.Checkbutton(text="Warn before trying to delete file or folder", variable=remove_warn_files, onvalue=True, offvalue=False)
+
+    autoclose_checkbox.place(x=5, y=5)
+    save_group_checkbox.place(x=5, y=25)
+    warn_group_checkbox.place(x=5, y=45)
+    warn_files_checkbox.place(x=5, y=65)
 
     lastdir = StringVar(value=groups["_SETTINGS_"]["lastdir"])
     vlcrcpath = StringVar(value=groups["_SETTINGS_"]["vlcrc_path"])
@@ -79,8 +93,10 @@ def draw_gui():
 
     def remove_group(group):
         if group != None:
-            msgbox_warning = messagebox.askquestion("Warning", f"Do you really want to delete {group}?")
-            if msgbox_warning == "yes":
+            msgbox_warning = ""
+            if remove_warn_group.get() is True:
+                msgbox_warning = messagebox.askquestion("Warning", f"Do you really want to delete {group}?")
+            if msgbox_warning == "yes" or remove_warn_group.get() is False:
                 del groups[group]
                 write_json(groups)
                 update_group_list()
@@ -120,8 +136,10 @@ def draw_gui():
         if entry != None:
             get_index = list(groups[group])
             get_entry = groups[group][get_index[entry]]
-            msgbox_warning = messagebox.askquestion("Warning", f"Do you really want to remove {get_entry}?")
-            if msgbox_warning == "yes":
+            msgbox_warning = ""
+            if remove_warn_files.get() is True:
+                msgbox_warning = messagebox.askquestion("Warning", f"Do you really want to remove {get_entry}?")
+            if msgbox_warning == "yes" or remove_warn_files.get() is False:
                 del groups[group][get_index[entry]]
                 write_json(groups)
 
@@ -403,20 +421,7 @@ def draw_gui():
     vlc_restore_vlcrc_button.place(x=250, y=360)
 
 
-    autoclose = tk.BooleanVar(value=groups["_SETTINGS_"]["autoclose"])
-    save_group = tk.BooleanVar(value=groups["_SETTINGS_"]["save_group"])
-    remove_warn_group = tk.BooleanVar(value=groups["_SETTINGS_"]["remove_warn_group"])
-    remove_warn_files = tk.BooleanVar(value=groups["_SETTINGS_"]["remove_warn_files"])
-
-    autoclose_checkbox = tk.Checkbutton(text="Close Program After Opening", variable=autoclose, onvalue=True, offvalue=False)
-    save_group_checkbox = tk.Checkbutton(text="Automatically select current group next time program is opened", variable=save_group, onvalue=True, offvalue=False)
-    warn_group_checkbox = tk.Checkbutton(text="Warn before trying to delete group", variable=remove_warn_group, onvalue=True, offvalue=False)
-    warn_files_checkbox = tk.Checkbutton(text="Warn before trying to delete file or folder", variable=remove_warn_files, onvalue=True, offvalue=False)
-
-    autoclose_checkbox.place(x=5, y=5)
-    save_group_checkbox.place(x=5, y=25)
-    warn_group_checkbox.place(x=5, y=45)
-    warn_files_checkbox.place(x=5, y=65)
+    
 
     def check_checkboxes(): 
         """Update value of checkboxes if any change has been made."""
