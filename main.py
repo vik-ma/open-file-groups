@@ -430,9 +430,9 @@ def draw_gui():
         if current_group.get() != None or current_group.get() != "None":
             index = -1
             for group in groups:
-                index += 1
                 if group == current_group.get():
                     group_listbox.select_set(index)
+                index += 1
             update_file_list()
 
     select_saved_group()
@@ -444,7 +444,15 @@ def draw_gui():
     def testasd():
         print(get_group_selection())
 
-    root.protocol("WM_DELETE_WINDOW", lambda:[root.destroy(), check_checkboxes()])
+    def close():
+        if save_group.get() is True:
+            groups["_SETTINGS_"]["saved_group"] = current_group.get()
+        else:
+            groups["_SETTINGS_"]["saved_group"] = "None"
+        write_json(groups)
+        root.destroy()    
+
+    root.protocol("WM_DELETE_WINDOW", lambda:[close(), check_checkboxes()])
 
     root.mainloop()
 
