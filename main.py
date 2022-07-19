@@ -1,4 +1,5 @@
 from enum import auto
+from operator import index
 import tkinter as tk
 from tkinter import BooleanVar, StringVar, filedialog, messagebox
 from tkinter.simpledialog import askstring
@@ -37,9 +38,6 @@ def draw_gui():
     add_group_button = tk.Button(text="Create New Group", command=lambda:[add_group()])
     add_group_button.place(x=195, y=100, width=gbw)
 
-    remove_group_button = tk.Button(text="Delete Group", command=lambda:[remove_group(get_group_selection())])
-    remove_group_button.place(x=195, y=130, width=gbw)
-
     move_group_up_button = tk.Button(text="Move Group Up", command=lambda:[move_group_up(get_group_index())])
     move_group_up_button.place(x=195, y=160, width=gbw)
 
@@ -47,22 +45,26 @@ def draw_gui():
     move_group_down_button.place(x=195, y=190, width=gbw)
 
     rename_group_button = tk.Button(text="Rename Group", command=lambda:[rename_group(get_group_selection())])
-    rename_group_button.place(x=195, y=220, width=gbw)
+    rename_group_button.place(x=195, y=130, width=gbw)
+    
+    remove_group_button = tk.Button(text="Delete Group", command=lambda:[remove_group(get_group_selection())])
+    remove_group_button.place(x=195, y=220, width=gbw)
     
     add_file_button = tk.Button(text="Add File", command=lambda:[add_file(current_group.get())])
     add_file_button.place(x=580, y=100, width=fbw)
 
     add_folder_button = tk.Button(text="Add Folder", command=lambda:[add_folder(current_group.get())])
     add_folder_button.place(x=580, y=130, width=fbw)
-
-    remove_entry_button = tk.Button(text="Remove Entry", command=lambda:[remove_entry(get_file_selection(),current_group.get())])
-    remove_entry_button.place(x=580, y=160, width=fbw)
     
     move_file_up_button = tk.Button(text="Move File Up", command=lambda:[move_file_up(get_file_selection(), get_group_selection())])
-    move_file_up_button.place(x=580, y=190, width=fbw)
+    move_file_up_button.place(x=580, y=160, width=fbw)
 
     move_file_down_button = tk.Button(text="Move File Down", command=lambda:[move_file_down(get_file_selection(), get_group_selection())])
-    move_file_down_button.place(x=580, y=220, width=fbw)
+    move_file_down_button.place(x=580, y=190, width=fbw)
+
+    remove_entry_button = tk.Button(text="Remove Entry", command=lambda:[remove_entry(get_file_selection(),current_group.get())])
+    remove_entry_button.place(x=580, y=220, width=fbw)
+
 
     autoclose = tk.BooleanVar(value=groups["_SETTINGS_"]["autoclose"])
     save_group = tk.BooleanVar(value=groups["_SETTINGS_"]["save_group"])
@@ -235,16 +237,23 @@ def draw_gui():
 
     def rename_group(group):
         if group != None:
+            index = get_group_index()[0]
             new_group = askstring("New Group", "Name file group:")
             if new_group in groups:
                 messagebox.showerror("Error", "A group with that name already exists!")
             else:
                 storevalue = groups[group]
-                del groups[group]
-                groups[new_group] = storevalue
+                temp_list = [[k,v] for k,v in groups.items()]
+                for t in temp_list:
+                    del groups[t[0]]
+                    if t[0] == group:
+                        groups[new_group] = storevalue
+                    else:
+                        groups[t[0]] = t[1]
                 write_json(groups)
                 update_group_list()
-                listbox_update_selection("Group", len(groups)-2)
+                current_group.set(new_group)
+                listbox_update_selection("Group", index)
 
     def move_file_up(lower, group):
         if (lower != None and group != None):
