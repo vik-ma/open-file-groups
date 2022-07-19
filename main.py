@@ -124,7 +124,9 @@ def draw_gui():
                 del groups[group][get_index[entry]]
                 write_json(groups)
 
-    current_group = StringVar(value="None")
+    current_group = StringVar(value=groups["_SETTINGS_"]["saved_group"])
+
+
 
     selected_group_label = tk.Label(text="Selected Group:", font="arial 13 bold")
     selected_group_label.place(x=330, y=50)
@@ -396,7 +398,16 @@ def draw_gui():
     vlc_restore_vlcrc_button = tk.Button(text="Restore Default Path", command=vlcrc_restore)
     vlc_restore_vlcrc_button.place(x=250, y=360)
 
+    def select_saved_group():
+        if current_group.get() != None or current_group.get() != "None":
+            index = -1
+            for group in groups:
+                index += 1
+                if group == current_group.get():
+                    group_listbox.select_set(index)
+            update_file_list()
 
+    select_saved_group()
 
     test_button = tk.Button(text="TEST", command=lambda:[testasd()])
     test_button.place(x=50, y=30)
@@ -420,7 +431,8 @@ else:
     settings = {
         "show_full_filepath": True,
         "lastdir": str(DESKTOP),
-        "vlcrc_path": vlcrc
+        "vlcrc_path": vlcrc,
+        "saved_group": "None"
         }
     json_content = {"_SETTINGS_":settings}
     write_json(json_content)
