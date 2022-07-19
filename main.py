@@ -46,6 +46,7 @@ def draw_gui():
     remove_group_button.place(x=255, y=130)
 
     lastdir = StringVar(value=groups["_SETTINGS_"]["lastdir"])
+    vlcrcpath = StringVar(value=groups["_SETTINGS_"]["vlcrc_path"])
 
     def add_group():
         new_group = askstring("New Group", "Name file group:")
@@ -291,13 +292,12 @@ def draw_gui():
     open_button.place(x=550, y=5)
 
     def check_vlcrc(path):
-        if pathlib.Path(path).exists():
+        if pathlib.Path(path).exists() and path[-5::] == "vlcrc":
             return True
         return False
 
     def check_vlrc_exists():
-        path = groups["_SETTINGS_"]["vlcrc_path"]
-        if check_vlcrc(path):
+        if check_vlcrc(vlcrcpath.get()):
             messagebox.showinfo("VLC Settings File", "VLC Settings File exists in current directory.")
         else:
             messagebox.showinfo("VLC Settings File", "VLC Settings File does not exist in current directory. Click Add Custom Path to manually locate 'vlcrc' file.")
@@ -343,17 +343,19 @@ def draw_gui():
                                                 filetypes=[("All Files", "*.*")])
         if filepath != "":
             groups["_SETTINGS_"]["vlcrc_path"] = filepath
-            print(filepath)
+            vlcrcpath.set(filepath)
             write_json(groups)
     
     def vlcrc_restore():
         msgbox_warning = messagebox.askquestion("Warning", f"Do you really want to restore default vlcrc path?")
         if msgbox_warning == "yes":
-            groups["_SETTINGS_"]["vlcrc_path"] = f"{HOMEFOLDER}\\AppData\\Roaming\\vlc\\vlcrc"
+            default_path = f"{HOMEFOLDER}\\AppData\\Roaming\\vlc\\vlcrc"
+            groups["_SETTINGS_"]["vlcrc_path"] = default_path
+            vlcrcpath.set(default_path)
             write_json(groups)
 
     def vlc_button_command(setting, newvalue=None, oldvalue=None):
-        path = groups["_SETTINGS_"]["vlcrc_path"]
+        path = vlcrcpath.get()
         if check_vlcrc(path):
             if newvalue != None:
                 change_vlcrc_settings(path, setting, newvalue, oldvalue)
