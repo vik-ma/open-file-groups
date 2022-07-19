@@ -30,20 +30,39 @@ def draw_gui():
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     root.resizable(width=False, height=False)
 
-    add_file_button = tk.Button(text="Add File", command=lambda:[add_file(current_group.get()),update_file_list()])
-    add_file_button.place(x=600, y=100)
-
-    add_folder_button = tk.Button(text="Add Folder", command=lambda:[add_folder(current_group.get()), update_file_list()])
-    add_folder_button.place(x=600, y=130)
-
-    remove_entry_button = tk.Button(text="Remove Entry", command=lambda:[remove_entry(get_file_selection(),current_group.get()),update_file_list()])
-    remove_entry_button.place(x=600, y=160)
+    gbw = 120
+    fbw = 100
 
     add_group_button = tk.Button(text="Add File Group", command=lambda:[add_group(), update_group_list()])
-    add_group_button.place(x=255, y=100)
+    add_group_button.place(x=195, y=100, width=gbw)
 
     remove_group_button = tk.Button(text="Remove Group", command=lambda:[remove_group(get_group_selection()), update_file_list()])
-    remove_group_button.place(x=255, y=130)
+    remove_group_button.place(x=195, y=130, width=gbw)
+
+    move_group_up_button = tk.Button(text="Move Group Up", command=lambda:[move_group_up(get_group_index())])
+    move_group_up_button.place(x=195, y=160, width=gbw)
+
+    move_group_down_button = tk.Button(text="Move Group Down", command=lambda:[move_group_down(get_group_index())])
+    move_group_down_button.place(x=195, y=190, width=gbw)
+
+    rename_group_button = tk.Button(text="Rename Group", command=lambda:[rename_group(get_group_selection())])
+    rename_group_button.place(x=195, y=220, width=gbw)
+    
+    add_file_button = tk.Button(text="Add File", command=lambda:[add_file(current_group.get()),update_file_list()])
+    add_file_button.place(x=580, y=100, width=fbw)
+
+    add_folder_button = tk.Button(text="Add Folder", command=lambda:[add_folder(current_group.get()), update_file_list()])
+    add_folder_button.place(x=580, y=130, width=fbw)
+
+    remove_entry_button = tk.Button(text="Remove Entry", command=lambda:[remove_entry(get_file_selection(),current_group.get()),update_file_list()])
+    remove_entry_button.place(x=580, y=160, width=fbw)
+    
+    move_file_up_button = tk.Button(text="Move File Up", command=lambda:[move_file_up(get_file_selection(), get_group_selection())])
+    move_file_up_button.place(x=580, y=190, width=fbw)
+
+    move_file_down_button = tk.Button(text="Move File Down", command=lambda:[move_file_down(get_file_selection(), get_group_selection())])
+    move_file_down_button.place(x=580, y=220, width=fbw)
+
 
     lastdir = StringVar(value=groups["_SETTINGS_"]["lastdir"])
     vlcrcpath = StringVar(value=groups["_SETTINGS_"]["vlcrc_path"])
@@ -80,7 +99,7 @@ def draw_gui():
                 lastdir.set(get_dir)
                 write_json(groups)
         else:
-            messagebox.showerror("Error", "Cannot add file if no group is selected!")
+            messagebox.showerror("Error", "Select a group to add file to first!")
 
     def add_folder(group):
         if get_group_selection() != None:
@@ -94,7 +113,7 @@ def draw_gui():
                 lastdir.set(get_dir)
                 write_json(groups)
         else:
-            messagebox.showerror("Error", "Cannot add folder if no group is selected!")
+            messagebox.showerror("Error", "Select a group to add folder to first!")
 
     def remove_entry(entry, group):
         if entry != None:
@@ -108,16 +127,16 @@ def draw_gui():
     current_group = StringVar(value="None")
 
     selected_group_label = tk.Label(text="Selected Group:", font="arial 13 bold")
-    selected_group_label.place(x=350, y=50)
+    selected_group_label.place(x=330, y=50)
     current_group_label = tk.Label(textvariable=current_group, font="arial 13 bold", fg="#166edb")
-    current_group_label.place(x=350, y=70)
+    current_group_label.place(x=330, y=70)
 
     file_list = StringVar()
     file_listbox = tk.Listbox(listvariable=file_list, width=40, selectmode="SINGLE", exportselection=False, activestyle="none")
-    file_listbox.place(x=350, y=100)
+    file_listbox.place(x=330, y=100)
 
     group_list = StringVar(value=[group for group in groups][1::])
-    group_listbox = tk.Listbox(listvariable=group_list, width=40, selectmode="SINGLE", exportselection=True, activestyle="none")
+    group_listbox = tk.Listbox(listvariable=group_list, width=30, selectmode="SINGLE", exportselection=True, activestyle="none")
     group_listbox.place(x=5, y=100)
 
 
@@ -158,20 +177,7 @@ def draw_gui():
     def update_group_list():
         group_list.set([group for group in groups][1::])
 
-    move_group_up_button = tk.Button(text="Move Group Up", command=lambda:[move_group_up(get_group_index())])
-    move_group_up_button.place(x=255, y=160)
 
-    move_group_down_button = tk.Button(text="Move Group Down", command=lambda:[move_group_down(get_group_index())])
-    move_group_down_button.place(x=255, y=190)
-
-    rename_group_button = tk.Button(text="Rename Group", command=lambda:[rename_group(get_group_selection())])
-    rename_group_button.place(x=255, y=220)
-
-    move_file_up_button = tk.Button(text="Move File Up", command=lambda:[move_file_up(get_file_selection(), get_group_selection())])
-    move_file_up_button.place(x=600, y=190)
-
-    move_file_down_button = tk.Button(text="Move File Down", command=lambda:[move_file_down(get_file_selection(), get_group_selection())])
-    move_file_down_button.place(x=600, y=220)
 
     def move_group_up(lower):
         if (lower != None):
@@ -262,7 +268,7 @@ def draw_gui():
     show_filepath_button(toggle_filepath_state.get())
 
     toggle_filepath_button = tk.Button(textvariable=toggle_filepath_button_text, command=lambda:[toggle_filepath()])
-    toggle_filepath_button.place(x=350, y=270)
+    toggle_filepath_button.place(x=330, y=270)
 
     def toggle_filepath():
         new_state = toggle_filepath_state.get()
