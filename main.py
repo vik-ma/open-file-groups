@@ -399,6 +399,32 @@ def draw_gui():
     vlc_restore_vlcrc_button.place(x=250, y=360)
 
 
+    close_check = tk.BooleanVar(value=groups["_SETTINGS_"]["autoclose"])
+    save_group = tk.BooleanVar(value=groups["_SETTINGS_"]["save_group"])
+    remove_warn_group = tk.BooleanVar(value=groups["_SETTINGS_"]["remove_warn_group"])
+    remove_warn_files = tk.BooleanVar(value=groups["_SETTINGS_"]["remove_warn_files"])
+
+    autoclose_checkbox = tk.Checkbutton(text="Close Program After Opening", variable=close_check, onvalue=True, offvalue=False)
+    save_group_checkbox = tk.Checkbutton(text="Automatically select current group next time program is opened", variable=save_group, onvalue=True, offvalue=False)
+    warn_group_checkbox = tk.Checkbutton(text="Warn before trying to delete group", variable=remove_warn_group, onvalue=True, offvalue=False)
+    warn_files_checkbox = tk.Checkbutton(text="Warn before trying to delete file or folder", variable=remove_warn_files, onvalue=True, offvalue=False)
+
+    autoclose_checkbox.place(x=5, y=5)
+    save_group_checkbox.place(x=5, y=25)
+    warn_group_checkbox.place(x=5, y=45)
+    warn_files_checkbox.place(x=5, y=65)
+
+    def check_checkboxes(): 
+        """Update value of checkboxes if any change has been made."""
+        if groups["_SETTINGS_"]["autoclose"] != close_check.get():
+            groups["_SETTINGS_"]["autoclose"] = close_check.get()
+        if groups["_SETTINGS_"]["save_group"] != save_group.get():
+            groups["_SETTINGS_"]["save_group"] = save_group.get()
+        if groups["_SETTINGS_"]["remove_warn_group"] != remove_warn_group.get():
+            groups["_SETTINGS_"]["remove_warn_group"] = remove_warn_group.get()
+        if groups["_SETTINGS_"]["remove_warn_files"] != remove_warn_files.get():
+            groups["_SETTINGS_"]["remove_warn_files"] = remove_warn_files.get()
+        write_json(groups)
 
     def select_saved_group():
         if current_group.get() != None or current_group.get() != "None":
@@ -412,13 +438,13 @@ def draw_gui():
     select_saved_group()
 
     test_button = tk.Button(text="TEST", command=lambda:[testasd()])
-    test_button.place(x=50, y=30)
+    test_button.place(x=550, y=330)
 
 
     def testasd():
         print(get_group_selection())
 
-
+    root.protocol("WM_DELETE_WINDOW", lambda:[root.destroy(), check_checkboxes()])
 
     root.mainloop()
 
@@ -438,7 +464,7 @@ else:
         "save_group": False,
         "autoclose": False,
         "remove_warn_group": False,
-        "remove_warn_file": True
+        "remove_warn_files": True
         }
     json_content = {"_SETTINGS_":settings}
     write_json(json_content)
