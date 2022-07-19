@@ -1,3 +1,4 @@
+from enum import auto
 import tkinter as tk
 from tkinter import BooleanVar, StringVar, filedialog, messagebox
 from tkinter.simpledialog import askstring
@@ -290,6 +291,9 @@ def draw_gui():
             for k, v in groups[group].items():
                 try:
                     os.startfile(k)
+                    if autoclose.get() is True:
+                        check_checkboxes()
+                        close()
                 except:
                     messagebox.showerror("Error", f"Cannot open {k}!")
         else:
@@ -399,12 +403,12 @@ def draw_gui():
     vlc_restore_vlcrc_button.place(x=250, y=360)
 
 
-    close_check = tk.BooleanVar(value=groups["_SETTINGS_"]["autoclose"])
+    autoclose = tk.BooleanVar(value=groups["_SETTINGS_"]["autoclose"])
     save_group = tk.BooleanVar(value=groups["_SETTINGS_"]["save_group"])
     remove_warn_group = tk.BooleanVar(value=groups["_SETTINGS_"]["remove_warn_group"])
     remove_warn_files = tk.BooleanVar(value=groups["_SETTINGS_"]["remove_warn_files"])
 
-    autoclose_checkbox = tk.Checkbutton(text="Close Program After Opening", variable=close_check, onvalue=True, offvalue=False)
+    autoclose_checkbox = tk.Checkbutton(text="Close Program After Opening", variable=autoclose, onvalue=True, offvalue=False)
     save_group_checkbox = tk.Checkbutton(text="Automatically select current group next time program is opened", variable=save_group, onvalue=True, offvalue=False)
     warn_group_checkbox = tk.Checkbutton(text="Warn before trying to delete group", variable=remove_warn_group, onvalue=True, offvalue=False)
     warn_files_checkbox = tk.Checkbutton(text="Warn before trying to delete file or folder", variable=remove_warn_files, onvalue=True, offvalue=False)
@@ -416,8 +420,8 @@ def draw_gui():
 
     def check_checkboxes(): 
         """Update value of checkboxes if any change has been made."""
-        if groups["_SETTINGS_"]["autoclose"] != close_check.get():
-            groups["_SETTINGS_"]["autoclose"] = close_check.get()
+        if groups["_SETTINGS_"]["autoclose"] != autoclose.get():
+            groups["_SETTINGS_"]["autoclose"] = autoclose.get()
         if groups["_SETTINGS_"]["save_group"] != save_group.get():
             groups["_SETTINGS_"]["save_group"] = save_group.get()
         if groups["_SETTINGS_"]["remove_warn_group"] != remove_warn_group.get():
