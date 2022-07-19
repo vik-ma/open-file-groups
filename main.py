@@ -361,14 +361,15 @@ def draw_gui():
     def open_files():
         group = current_group.get()
         if group != "None" and group != "":
-            for k, v in groups[group].items():
-                try:
-                    os.startfile(k)
-                    if autoclose.get() is True:
-                        check_checkboxes()
-                        close()
-                except:
-                    messagebox.showerror("Error", f"Cannot open {k}!")
+            if len(groups[group]) > 0:
+                for k, v in groups[group].items():
+                    try:
+                        os.startfile(k)
+                    except:
+                        messagebox.showerror("Error", f"Cannot open {k}!")
+                if autoclose.get() is True:
+                    check_checkboxes()
+                    close()
         else:
             messagebox.showerror("Error", "Must select a group to open from!")
 
@@ -514,7 +515,7 @@ def draw_gui():
         write_json(groups)
         root.destroy()    
 
-    root.protocol("WM_DELETE_WINDOW", lambda:[close(), check_checkboxes()])
+    root.protocol("WM_DELETE_WINDOW", lambda:[check_checkboxes(), close()])
 
     root.mainloop()
 
