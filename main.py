@@ -91,6 +91,9 @@ def draw_gui():
                 groups[new_group] = {}
                 write_json(groups)
                 update_group_list()
+                current_group.set(new_group)
+                listbox_update_selection("Group", len(groups)-2)
+                update_file_list()
 
     def remove_group(group):
         if group != None:
