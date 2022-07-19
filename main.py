@@ -34,10 +34,10 @@ def draw_gui():
     gbw = 120
     fbw = 100
 
-    add_group_button = tk.Button(text="Create New Group", command=lambda:[add_group(), update_group_list()])
+    add_group_button = tk.Button(text="Create New Group", command=lambda:[add_group()])
     add_group_button.place(x=195, y=100, width=gbw)
 
-    remove_group_button = tk.Button(text="Delete Group", command=lambda:[remove_group(get_group_selection()), update_file_list()])
+    remove_group_button = tk.Button(text="Delete Group", command=lambda:[remove_group(get_group_selection())])
     remove_group_button.place(x=195, y=130, width=gbw)
 
     move_group_up_button = tk.Button(text="Move Group Up", command=lambda:[move_group_up(get_group_index())])
@@ -49,13 +49,13 @@ def draw_gui():
     rename_group_button = tk.Button(text="Rename Group", command=lambda:[rename_group(get_group_selection())])
     rename_group_button.place(x=195, y=220, width=gbw)
     
-    add_file_button = tk.Button(text="Add File", command=lambda:[add_file(current_group.get()),update_file_list()])
+    add_file_button = tk.Button(text="Add File", command=lambda:[add_file(current_group.get())])
     add_file_button.place(x=580, y=100, width=fbw)
 
-    add_folder_button = tk.Button(text="Add Folder", command=lambda:[add_folder(current_group.get()), update_file_list()])
+    add_folder_button = tk.Button(text="Add Folder", command=lambda:[add_folder(current_group.get())])
     add_folder_button.place(x=580, y=130, width=fbw)
 
-    remove_entry_button = tk.Button(text="Remove Entry", command=lambda:[remove_entry(get_file_selection(),current_group.get()),update_file_list()])
+    remove_entry_button = tk.Button(text="Remove Entry", command=lambda:[remove_entry(get_file_selection(),current_group.get())])
     remove_entry_button.place(x=580, y=160, width=fbw)
     
     move_file_up_button = tk.Button(text="Move File Up", command=lambda:[move_file_up(get_file_selection(), get_group_selection())])
@@ -90,6 +90,7 @@ def draw_gui():
             else:
                 groups[new_group] = {}
                 write_json(groups)
+                update_group_list()
 
     def remove_group(group):
         if group != None:
@@ -101,6 +102,7 @@ def draw_gui():
                 write_json(groups)
                 update_group_list()
                 current_group.set(get_group_selection())
+                update_file_list()
 
 
     def add_file(group):
@@ -115,6 +117,7 @@ def draw_gui():
                 groups["_SETTINGS_"]["lastdir"] = get_dir
                 lastdir.set(get_dir)
                 write_json(groups)
+                update_file_list()
         else:
             messagebox.showerror("Error", "Select a group to add file to first!")
 
@@ -129,6 +132,7 @@ def draw_gui():
                 groups["_SETTINGS_"]["lastdir"] = get_dir
                 lastdir.set(get_dir)
                 write_json(groups)
+                update_file_list()
         else:
             messagebox.showerror("Error", "Select a group to add folder to first!")
 
@@ -142,6 +146,7 @@ def draw_gui():
             if msgbox_warning == "yes" or remove_warn_files.get() is False:
                 del groups[group][get_index[entry]]
                 write_json(groups)
+                update_file_list()
 
     current_group = StringVar(value=groups["_SETTINGS_"]["saved_group"])
 
