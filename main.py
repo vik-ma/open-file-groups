@@ -65,6 +65,11 @@ def draw_gui():
     remove_entry_button = tk.Button(text="Remove Entry", command=lambda:[remove_entry(get_file_selection(),current_group.get())])
     remove_entry_button.place(x=580, y=220, width=fbw)
 
+    sort_groups_button = tk.Button(text="Sort Groups Alphabetically", command=lambda:[sort_groups()])
+    sort_groups_button.place(x=5, y=270)
+
+    sort_files_button = tk.Button(text="Sort Files/Folders Alphabetically", command=lambda:[sort_files()])
+    sort_files_button.place(x=330, y=270)
 
     autoclose = tk.BooleanVar(value=groups["_SETTINGS_"]["autoclose"])
     save_group = tk.BooleanVar(value=groups["_SETTINGS_"]["save_group"])
@@ -131,7 +136,7 @@ def draw_gui():
             folderpath = filedialog.askdirectory(initialdir=lastdir.get(), title="Select Folder")
             if folderpath != "":
                 get_foldername = folderpath.split("/")
-                foldername = get_foldername[-1]
+                foldername = f"{get_foldername[-1]} (Folder)"
                 groups[group][folderpath] = foldername
                 get_dir = folderpath.rsplit("/",1)[0]
                 groups["_SETTINGS_"]["lastdir"] = get_dir
@@ -155,8 +160,6 @@ def draw_gui():
 
     current_group = StringVar(value=groups["_SETTINGS_"]["saved_group"])
 
-
-
     selected_group_label = tk.Label(text="Selected Group:", font="arial 13 bold")
     selected_group_label.place(x=330, y=50)
     current_group_label = tk.Label(textvariable=current_group, font="arial 13 bold", fg="#166edb")
@@ -170,7 +173,6 @@ def draw_gui():
     group_listbox = tk.Listbox(listvariable=group_list, width=30, selectmode="SINGLE", exportselection=True, activestyle="none")
     group_listbox.place(x=5, y=100)
 
-
     def group_listbox_on_select(event):
         e = event.widget
         group = e.get(e.curselection())
@@ -179,7 +181,6 @@ def draw_gui():
         else:
             file_list.set([v for k, v in groups[group].items()])
         current_group.set(e.get(e.curselection()))
-
 
     group_listbox.bind('<<ListboxSelect>>', group_listbox_on_select)
 
@@ -207,8 +208,6 @@ def draw_gui():
 
     def update_group_list():
         group_list.set([group for group in groups][1::])
-
-
 
     def move_group_up(lower):
         if (lower != None):
@@ -239,21 +238,66 @@ def draw_gui():
         if group != None:
             index = get_group_index()[0]
             new_group = askstring("New Group", "Name file group:")
-            if new_group in groups:
-                messagebox.showerror("Error", "A group with that name already exists!")
-            else:
-                storevalue = groups[group]
-                temp_list = [[k,v] for k,v in groups.items()]
-                for t in temp_list:
-                    del groups[t[0]]
-                    if t[0] == group:
-                        groups[new_group] = storevalue
-                    else:
-                        groups[t[0]] = t[1]
-                write_json(groups)
-                update_group_list()
-                current_group.set(new_group)
+            if new_group != None:
+                if new_group in groups:
+                    messagebox.showerror("Error", "A group with that name already exists!")
+                else:
+                    storevalue = groups[group]
+                    temp_list = [[k,v] for k,v in groups.items()]
+                    for t in temp_list:
+                        del groups[t[0]]
+                        if t[0] == group:
+                            groups[new_group] = storevalue
+                        else:
+                            groups[t[0]] = t[1]
+                    write_json(groups)
+                    update_group_list()
+                    current_group.set(new_group)
+                    listbox_update_selection("Group", index)
+
+    def get_key(list):
+        return list[0].lower()
+
+    def get_value(list):
+        return list[1].lower()
+
+    def sort_groups():
+        group = get_group_selection()
+        temp_list = [[k,v] for k,v in groups.items()][1::]
+        if temp_list != [] and group != "None":
+            sorted_list = sorted(temp_list, key=get_key)
+            for t in temp_list:
+                del groups[t[0]]
+            index = 0
+            for i, s in enumerate(sorted_list):
+                groups[s[0]] = s[1]
+                if s[0] == group:
+                    index = i
+            write_json(groups)
+            update_group_list()
+            if group != None:
                 listbox_update_selection("Group", index)
+
+    def sort_files():
+        group = get_group_selection()
+        if group != "None" and group != None:
+            temp_list = [[k,v] for k,v in groups[group].items()]
+            if temp_list != []:
+                sorted_list = sorted(temp_list, key=get_value)
+                selected_file = ""
+                for i, t in enumerate(temp_list):
+                    del groups[group][t[0]]
+                    if i == get_file_selection():
+                        selected_file = t[0]
+                index = 0
+                for i, s in enumerate(sorted_list):
+                    groups[group][s[0]] = s[1]
+                    if selected_file == s[0]:
+                        index = i
+                write_json(groups)
+                update_file_list()
+                if (get_file_selection() != None):
+                    listbox_update_selection("Files", index)
 
     def move_file_up(lower, group):
         if (lower != None and group != None):
@@ -302,7 +346,7 @@ def draw_gui():
     show_filepath_button(toggle_filepath_state.get())
 
     toggle_filepath_button = tk.Button(textvariable=toggle_filepath_button_text, command=lambda:[toggle_filepath()])
-    toggle_filepath_button.place(x=330, y=270)
+    toggle_filepath_button.place(x=560, y=270)
 
     def toggle_filepath():
         new_state = toggle_filepath_state.get()
@@ -433,9 +477,6 @@ def draw_gui():
     vlc_restore_vlcrc_button = tk.Button(text="Restore Default Path", command=vlcrc_restore)
     vlc_restore_vlcrc_button.place(x=250, y=360)
 
-
-    
-
     def check_checkboxes(): 
         """Update value of checkboxes if any change has been made."""
         if groups["_SETTINGS_"]["autoclose"] != autoclose.get():
@@ -464,7 +505,8 @@ def draw_gui():
 
 
     def testasd():
-        print(get_group_selection())
+        #sort_groups()
+        sort_files()
 
     def close():
         if save_group.get() is True:
@@ -477,8 +519,6 @@ def draw_gui():
     root.protocol("WM_DELETE_WINDOW", lambda:[close(), check_checkboxes()])
 
     root.mainloop()
-
-
 
 if has_json:
     with open ("saved_groups.json", "r", encoding="utf-8") as file:
