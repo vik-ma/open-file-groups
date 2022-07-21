@@ -33,19 +33,27 @@ def draw_gui():
     lastdir = StringVar(value=groups["_SETTINGS_"]["lastdir"])
     vlcrcpath = StringVar(value=groups["_SETTINGS_"]["vlcrc_path"])
 
-    vlc_settings_frame = tk.Frame(height=299, width=701, highlightbackground="black", highlightthickness=1)
+    vlc_settings_frame = tk.Frame(height=299, width=702, highlightbackground="black", highlightthickness=1)
     vlc_settings_frame.place(x=-1, y=-1)
 
-    vlc_settings_title_label = tk.Label(text="VLC Media Player Settings", font="arial 13 bold")
-    vlc_settings_title_label.place(x=5, y=302)
-
-    vlc_settings_desc_label = tk.Label(text="When opening media files in VLC Media Player, it is recommended to\nstart the media files paused and to allow more than one instance of\nVLC Media Player to be launced. You can turn these features on or off here.")
-    vlc_settings_desc_label.place(x=5, y=322)
+    vlc_settings_title_label = tk.Label(text="VLC Media Player Settings", font="arial 13 bold", fg="#fc8c03")
+    vlc_settings_title_label.place(x=5, y=304)
     
     show_vlcrc_path = StringVar(value=f"VLC Settings file: {vlcrcpath.get()}")
 
-    vlcrc_path_label = tk.Label(textvariable=show_vlcrc_path)
-    vlcrc_path_label.place(x=5, y=370)
+    vlcrc_path_label = tk.Label(textvariable=show_vlcrc_path, font="arial 8 bold")
+    vlcrc_path_label.place(x=5, y=330)
+
+    vlc_settings_desc_label = tk.Label(text="When opening media files in VLC Media Player, it is recommended to\nstart the media files paused and to allow more than one instance of\nVLC Media Player to be launced. You can turn these features on or off here.", justify="left")
+    vlc_settings_desc_label.place(x=5, y=346)
+    
+    vlc_start_paused_label = tk.Label(text="Start Paused:", font="arial 9 bold")
+    vlc_start_paused_label.place(x=410, y=340)
+
+    vlc_one_instance_label = tk.Label(text="Allow only one instance:", font="arial 9 bold")
+    vlc_one_instance_label.place(x=410, y=370)
+
+    
 
     gbw = 120
     fbw = 100
@@ -400,7 +408,7 @@ def draw_gui():
         if check_vlcrc(vlcrcpath.get()):
             messagebox.showinfo("VLC Settings File", "VLC Settings File exists in current directory.")
         else:
-            messagebox.showinfo("VLC Settings File", "VLC Settings File does not exist in current directory. Click Add Custom Path to manually locate 'vlcrc' file.")
+            messagebox.showinfo("VLC Settings File", "VLC Settings File does not exist in current directory.\nClick Add Custom Path to manually locate 'vlcrc' file.")
 
     def change_vlcrc_settings(path, setting, newvalue, oldvalue):
         try:
@@ -427,7 +435,7 @@ def draw_gui():
                 case "start-paused=":
                     setting_str = "Start Paused"
                 case "one-instance-when-started-from-file=":
-                    setting_str = "Only Allow One Instance"
+                    setting_str = "Allow Only One Instance"
             match value:
                 case "1":
                     value_str = "ON"
@@ -464,34 +472,35 @@ def draw_gui():
             else:
                 check_vlcrc_settings(path, setting)
         else:  
-            messagebox.showerror("Error", "VLC settings file not found! Click Add Custom Path to manually select VLC settings file.")
+            messagebox.showerror("Error", "VLC settings file not found!\nClick Add Custom Path to manually select VLC settings file.")
 
     vlc_paused = "start-paused="
     vlc_mult_inst = "one-instance-when-started-from-file="
 
-    vlc_pause_on_button = tk.Button(text="Pause On", command=lambda:[vlc_button_command(vlc_paused, 1, 0)])
-    vlc_pause_off_button = tk.Button(text="Pause Off", command=lambda:[vlc_button_command(vlc_paused, 0, 1)])
+    vlc_pause_on_button = tk.Button(text="Turn On", command=lambda:[vlc_button_command(vlc_paused, 1, 0)], font="segoeui 8")
+    vlc_pause_off_button = tk.Button(text="Turn Off", command=lambda:[vlc_button_command(vlc_paused, 0, 1)], font="segoeui 8")
 
-    vlc_multiple_on_button = tk.Button(text="Mult On", command=lambda:[vlc_button_command(vlc_mult_inst, 1, 0)])
-    vlc_multiple_off_button = tk.Button(text="Mult Off", command=lambda:[vlc_button_command(vlc_mult_inst, 0, 1)])
+    vlc_multiple_on_button = tk.Button(text="Turn On", command=lambda:[vlc_button_command(vlc_mult_inst, 1, 0)], font="segoeui 8")
+    vlc_multiple_off_button = tk.Button(text="Turn Off", command=lambda:[vlc_button_command(vlc_mult_inst, 0, 1)], font="segoeui 8")
 
-    vlc_pause_on_button.place(x=5, y=300)
-    vlc_pause_off_button.place(x=75, y=300)
-    vlc_multiple_on_button.place(x=5, y=330)
-    vlc_multiple_off_button.place(x=75, y=330)
+    vlc_pause_on_button.place(x=595, y=336)
+    vlc_pause_off_button.place(x=645, y=336)
+    vlc_multiple_on_button.place(x=595, y=366)
+    vlc_multiple_off_button.place(x=645, y=366)
 
-    vlc_check_pause_button = tk.Button(text="Check Pause", command=lambda:[vlc_button_command(vlc_paused)])
-    vlc_check_pause_button.place(x=5, y=360)
-    vlc_check_multiple_button = tk.Button(text="Check Mult", command=lambda:[vlc_button_command(vlc_mult_inst)])
-    vlc_check_multiple_button.place(x=120, y=360)
+    vlc_check_pause_button = tk.Button(text="Check", command=lambda:[vlc_button_command(vlc_paused)], font="segoeui 8")
+    vlc_check_pause_button.place(x=554, y=336)
+    vlc_check_multiple_button = tk.Button(text="Check", command=lambda:[vlc_button_command(vlc_mult_inst)], font="segoeui 8")
+    vlc_check_multiple_button.place(x=554, y=366)
 
     vlc_check_vlcrc_button = tk.Button(text="Check if vlcrc file exists", command=check_vlrc_exists)
-    vlc_check_vlcrc_button.place(x=250, y=300)
+    vlc_check_vlcrc_button.place(x=332, y=302)
     vlc_add_vlcrc_button = tk.Button(text="Add Custom Path", command=vlcrc_select_dir)
-    vlc_add_vlcrc_button.place(x=250, y=330)
+    vlc_add_vlcrc_button.place(x=469, y=302)
     vlc_restore_vlcrc_button = tk.Button(text="Restore Default Path", command=vlcrc_restore)
-    vlc_restore_vlcrc_button.place(x=250, y=360)
+    vlc_restore_vlcrc_button.place(x=577, y=302)
 
+    #+137 +109
     def check_checkboxes(): 
         """Update value of checkboxes if any change has been made."""
         if groups["_SETTINGS_"]["autoclose"] != autoclose.get():
