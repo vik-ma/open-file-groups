@@ -55,38 +55,38 @@ def draw_gui():
 
     
 
-    gbw = 120
-    fbw = 100
+    gbw = 124
+    fbw = 101
 
     add_group_button = tk.Button(text="Create New Group", command=lambda:[add_group()])
-    add_group_button.place(x=195, y=100, width=gbw)
+    add_group_button.place(x=203, y=100, width=gbw)
 
     move_group_up_button = tk.Button(text="Move Group Up", command=lambda:[move_group_up(get_group_index())])
-    move_group_up_button.place(x=195, y=160, width=gbw)
+    move_group_up_button.place(x=203, y=160, width=gbw)
 
     move_group_down_button = tk.Button(text="Move Group Down", command=lambda:[move_group_down(get_group_index())])
-    move_group_down_button.place(x=195, y=190, width=gbw)
+    move_group_down_button.place(x=203, y=190, width=gbw)
 
     rename_group_button = tk.Button(text="Rename Group", command=lambda:[rename_group(get_group_selection())])
-    rename_group_button.place(x=195, y=130, width=gbw)
+    rename_group_button.place(x=203, y=130, width=gbw)
     
     remove_group_button = tk.Button(text="Delete Group", command=lambda:[remove_group(get_group_selection())])
-    remove_group_button.place(x=195, y=220, width=gbw)
+    remove_group_button.place(x=203, y=220, width=gbw)
     
     add_file_button = tk.Button(text="Add File", command=lambda:[add_file(current_group.get())])
-    add_file_button.place(x=580, y=100, width=fbw)
+    add_file_button.place(x=595, y=100, width=fbw)
 
     add_folder_button = tk.Button(text="Add Folder", command=lambda:[add_folder(current_group.get())])
-    add_folder_button.place(x=580, y=130, width=fbw)
+    add_folder_button.place(x=595, y=130, width=fbw)
     
     move_file_up_button = tk.Button(text="Move File Up", command=lambda:[move_file_up(get_file_selection(), get_group_selection())])
-    move_file_up_button.place(x=580, y=160, width=fbw)
+    move_file_up_button.place(x=595, y=160, width=fbw)
 
     move_file_down_button = tk.Button(text="Move File Down", command=lambda:[move_file_down(get_file_selection(), get_group_selection())])
-    move_file_down_button.place(x=580, y=190, width=fbw)
+    move_file_down_button.place(x=595, y=190, width=fbw)
 
     remove_entry_button = tk.Button(text="Remove Entry", command=lambda:[remove_entry(get_file_selection(),current_group.get())])
-    remove_entry_button.place(x=580, y=220, width=fbw)
+    remove_entry_button.place(x=595, y=220, width=fbw)
 
     sort_groups_button = tk.Button(text="Sort Groups Alphabetically", command=lambda:[sort_groups()])
     sort_groups_button.place(x=5, y=267)
@@ -186,11 +186,11 @@ def draw_gui():
     current_group_label.place(x=330, y=70)
 
     file_list = StringVar()
-    file_listbox = tk.Listbox(listvariable=file_list, width=40, selectmode="SINGLE", exportselection=False, activestyle="none")
+    file_listbox = tk.Listbox(listvariable=file_list, width=43, selectmode="SINGLE", exportselection=False, activestyle="none")
     file_listbox.place(x=330, y=100)
 
     group_list = StringVar(value=[group for group in groups][1::])
-    group_listbox = tk.Listbox(listvariable=group_list, width=30, selectmode="SINGLE", exportselection=True, activestyle="none")
+    group_listbox = tk.Listbox(listvariable=group_list, width=32, selectmode="SINGLE", exportselection=True, activestyle="none")
     group_listbox.place(x=5, y=100)
 
     def group_listbox_on_select(event):
@@ -359,14 +359,14 @@ def draw_gui():
 
     def show_filepath_button(state):
         if state is True:
-            toggle_filepath_button_text.set("Toggle Shorter Filepath")
+            toggle_filepath_button_text.set("Toggle Shorter Filepaths")
         else:
-            toggle_filepath_button_text.set("Toggle Full Filepath")
+            toggle_filepath_button_text.set("Toggle Full Filepaths")
 
     show_filepath_button(toggle_filepath_state.get())
 
     toggle_filepath_button = tk.Button(textvariable=toggle_filepath_button_text, command=lambda:[toggle_filepath()])
-    toggle_filepath_button.place(x=560, y=267)
+    toggle_filepath_button.place(x=513, y=267)
 
     def toggle_filepath():
         new_state = toggle_filepath_state.get()
