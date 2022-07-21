@@ -524,14 +524,6 @@ def draw_gui():
 
     select_saved_group()
 
-    test_button = tk.Button(text="TEST", command=lambda:[testasd()])
-    test_button.place(x=480, y=5)
-
-
-    def testasd():
-        #sort_groups()
-        sort_files()
-
     def close():
         if save_group.get() is True:
             groups["_SETTINGS_"]["saved_group"] = current_group.get()
