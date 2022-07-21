@@ -30,6 +30,23 @@ def draw_gui():
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     root.resizable(width=False, height=False)
 
+    lastdir = StringVar(value=groups["_SETTINGS_"]["lastdir"])
+    vlcrcpath = StringVar(value=groups["_SETTINGS_"]["vlcrc_path"])
+
+    vlc_settings_frame = tk.Frame(height=299, width=701, highlightbackground="black", highlightthickness=1)
+    vlc_settings_frame.place(x=-1, y=-1)
+
+    vlc_settings_title_label = tk.Label(text="VLC Media Player Settings", font="arial 13 bold")
+    vlc_settings_title_label.place(x=5, y=302)
+
+    vlc_settings_desc_label = tk.Label(text="When opening media files in VLC Media Player, it is recommended to\nstart the media files paused and to allow more than one instance of\nVLC Media Player to be launced. You can turn these features on or off here.")
+    vlc_settings_desc_label.place(x=5, y=322)
+    
+    show_vlcrc_path = StringVar(value=f"VLC Settings file: {vlcrcpath.get()}")
+
+    vlcrc_path_label = tk.Label(textvariable=show_vlcrc_path)
+    vlcrc_path_label.place(x=5, y=370)
+
     gbw = 120
     fbw = 100
 
@@ -64,10 +81,10 @@ def draw_gui():
     remove_entry_button.place(x=580, y=220, width=fbw)
 
     sort_groups_button = tk.Button(text="Sort Groups Alphabetically", command=lambda:[sort_groups()])
-    sort_groups_button.place(x=5, y=270)
+    sort_groups_button.place(x=5, y=267)
 
     sort_files_button = tk.Button(text="Sort Files/Folders Alphabetically", command=lambda:[sort_files()])
-    sort_files_button.place(x=330, y=270)
+    sort_files_button.place(x=330, y=267)
 
     autoclose = tk.BooleanVar(value=groups["_SETTINGS_"]["autoclose"])
     save_group = tk.BooleanVar(value=groups["_SETTINGS_"]["save_group"])
@@ -83,9 +100,6 @@ def draw_gui():
     save_group_checkbox.place(x=5, y=25)
     warn_group_checkbox.place(x=5, y=45)
     warn_files_checkbox.place(x=5, y=65)
-
-    lastdir = StringVar(value=groups["_SETTINGS_"]["lastdir"])
-    vlcrcpath = StringVar(value=groups["_SETTINGS_"]["vlcrc_path"])
 
     def add_group():
         new_group = askstring("New Group", "Name file group:")
@@ -344,7 +358,7 @@ def draw_gui():
     show_filepath_button(toggle_filepath_state.get())
 
     toggle_filepath_button = tk.Button(textvariable=toggle_filepath_button_text, command=lambda:[toggle_filepath()])
-    toggle_filepath_button.place(x=560, y=270)
+    toggle_filepath_button.place(x=560, y=267)
 
     def toggle_filepath():
         new_state = toggle_filepath_state.get()
@@ -430,6 +444,7 @@ def draw_gui():
         if filepath != "":
             groups["_SETTINGS_"]["vlcrc_path"] = filepath
             vlcrcpath.set(filepath)
+            show_vlcrc_path.set(f"VLC Settings file: {vlcrcpath.get()}")
             write_json(groups)
     
     def vlcrc_restore():
@@ -438,6 +453,7 @@ def draw_gui():
             default_path = f"{HOMEFOLDER}\\AppData\\Roaming\\vlc\\vlcrc"
             groups["_SETTINGS_"]["vlcrc_path"] = default_path
             vlcrcpath.set(default_path)
+            show_vlcrc_path.set(f"VLC Settings file: {vlcrcpath.get()}")
             write_json(groups)
 
     def vlc_button_command(setting, newvalue=None, oldvalue=None):
@@ -500,7 +516,7 @@ def draw_gui():
     select_saved_group()
 
     test_button = tk.Button(text="TEST", command=lambda:[testasd()])
-    test_button.place(x=550, y=330)
+    test_button.place(x=480, y=5)
 
 
     def testasd():
