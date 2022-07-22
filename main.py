@@ -53,7 +53,8 @@ def draw_gui():
     vlc_one_instance_label = tk.Label(text="Allow only one instance:", font="arial 9 bold")
     vlc_one_instance_label.place(x=410, y=370)
 
-    
+    created_groups_label = tk.Label(text="Created Groups:", font="arial 13 bold")
+    created_groups_label.place(x=3, y=44)
 
     gbw = 124
     fbw = 101
@@ -95,13 +96,14 @@ def draw_gui():
     sort_files_button = tk.Button(text="Sort Files/Folders Alphabetically", command=lambda:[sort_files()])
     sort_files_button.place(x=330, y=237)
 
+
     autoclose = tk.BooleanVar(value=groups["_SETTINGS_"]["autoclose"])
     save_group = tk.BooleanVar(value=groups["_SETTINGS_"]["save_group"])
 
     autoclose_checkbox = tk.Checkbutton(text="Close Program After Opening", variable=autoclose, onvalue=True, offvalue=False)
     save_group_checkbox = tk.Checkbutton(text="Automatically select current group next time program is opened", variable=save_group, onvalue=True, offvalue=False)
     
-    autoclose_checkbox.place(x=370, y=1)
+    autoclose_checkbox.place(x=365, y=1)
     save_group_checkbox.place(x=1, y=1)
 
     remove_warn_group = tk.BooleanVar(value=groups["_SETTINGS_"]["remove_warn_group"])
