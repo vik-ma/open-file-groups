@@ -36,23 +36,6 @@ def draw_gui():
     vlc_settings_frame = tk.Frame(height=299, width=702, highlightbackground="black", highlightthickness=1)
     vlc_settings_frame.place(x=-1, y=-1)
 
-    vlc_settings_title_label = tk.Label(text="VLC Media Player Settings", font="arial 13 bold", fg="#fc8c03")
-    vlc_settings_title_label.place(x=5, y=304)
-    
-    show_vlcrc_path = StringVar(value=f"VLC Settings file: {vlcrcpath.get()}")
-
-    vlcrc_path_label = tk.Label(textvariable=show_vlcrc_path, font="arial 8 bold")
-    vlcrc_path_label.place(x=5, y=330)
-
-    vlc_settings_desc_label = tk.Label(text="When opening media files in VLC Media Player, it is recommended to\nstart the media files paused and to allow more than one instance of\nVLC Media Player to be launced. You can turn these features on or off here.", justify="left")
-    vlc_settings_desc_label.place(x=5, y=346)
-    
-    vlc_start_paused_label = tk.Label(text="Start Paused:", font="arial 9 bold")
-    vlc_start_paused_label.place(x=410, y=340)
-
-    vlc_one_instance_label = tk.Label(text="Allow only one instance:", font="arial 9 bold")
-    vlc_one_instance_label.place(x=410, y=370)
-
     created_groups_label = tk.Label(text="Created Groups:", font="arial 13 bold")
     created_groups_label.place(x=3, y=44)
 
@@ -485,8 +468,26 @@ def draw_gui():
         else:  
             messagebox.showerror("Error", "VLC settings file not found!\nClick Add Custom Path to manually select VLC settings file.")
 
+
+    vlc_settings_title_label = tk.Label(text="VLC Media Player Settings", font="arial 13 bold", fg="#fc8c03")
+    vlc_settings_title_label.place(x=4, y=303)
+    
+    show_vlcrc_path = StringVar(value=f"VLC Settings file: {vlcrcpath.get()}")
+
+    vlcrc_path_label = tk.Label(textvariable=show_vlcrc_path, font="arial 8 bold")
+    vlcrc_path_label.place(x=4, y=327)
+
+    vlc_settings_desc_label = tk.Label(text="When opening media files in VLC Media Player, it is recommended to\nstart the media files paused and to allow more than one instance of\nVLC Media Player to be active. You can turn these features on or off here.", justify="left")
+    vlc_settings_desc_label.place(x=4, y=346)
+
     vlc_paused = "start-paused="
     vlc_mult_inst = "one-instance-when-started-from-file="
+
+    vlc_start_paused_label = tk.Label(text="Start Paused:", font="arial 9 bold")
+    vlc_start_paused_label.place(x=469, y=346)
+
+    vlc_one_instance_label = tk.Label(text="Allow Only One Instance:", font="arial 9 bold")
+    vlc_one_instance_label.place(x=406, y=372)
 
     vlc_pause_on_button = tk.Button(text="Turn On", command=lambda:[vlc_button_command(vlc_paused, 1, 0)], font="segoeui 8")
     vlc_pause_off_button = tk.Button(text="Turn Off", command=lambda:[vlc_button_command(vlc_paused, 0, 1)], font="segoeui 8")
@@ -494,20 +495,20 @@ def draw_gui():
     vlc_multiple_on_button = tk.Button(text="Turn On", command=lambda:[vlc_button_command(vlc_mult_inst, 1, 0)], font="segoeui 8")
     vlc_multiple_off_button = tk.Button(text="Turn Off", command=lambda:[vlc_button_command(vlc_mult_inst, 0, 1)], font="segoeui 8")
 
-    vlc_pause_on_button.place(x=595, y=336)
-    vlc_pause_off_button.place(x=645, y=336)
-    vlc_multiple_on_button.place(x=595, y=366)
-    vlc_multiple_off_button.place(x=645, y=366)
+    vlc_pause_on_button.place(x=595, y=343)
+    vlc_pause_off_button.place(x=645, y=343)
+    vlc_multiple_on_button.place(x=595, y=370)
+    vlc_multiple_off_button.place(x=645, y=370)
 
     vlc_check_pause_button = tk.Button(text="Check", command=lambda:[vlc_button_command(vlc_paused)], font="segoeui 8")
-    vlc_check_pause_button.place(x=554, y=336)
+    vlc_check_pause_button.place(x=554, y=343)
     vlc_check_multiple_button = tk.Button(text="Check", command=lambda:[vlc_button_command(vlc_mult_inst)], font="segoeui 8")
-    vlc_check_multiple_button.place(x=554, y=366)
+    vlc_check_multiple_button.place(x=554, y=370)
 
     vlc_check_vlcrc_button = tk.Button(text="Check if vlcrc file exists", command=check_vlrc_exists)
-    vlc_check_vlcrc_button.place(x=332, y=302)
+    vlc_check_vlcrc_button.place(x=330, y=302)
     vlc_add_vlcrc_button = tk.Button(text="Add Custom Path", command=vlcrc_select_dir)
-    vlc_add_vlcrc_button.place(x=469, y=302)
+    vlc_add_vlcrc_button.place(x=467, y=302)
     vlc_restore_vlcrc_button = tk.Button(text="Restore Default Path", command=vlcrc_restore)
     vlc_restore_vlcrc_button.place(x=577, y=302)
 
