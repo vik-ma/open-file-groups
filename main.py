@@ -204,12 +204,14 @@ def draw_gui():
 
     def group_listbox_on_select(event):
         e = event.widget
-        group = e.get(e.curselection())
-        if toggle_filepath_state.get() is True:
-            file_list.set([k for k, v in groups[group].items()])
-        else:
-            file_list.set([v for k, v in groups[group].items()])
-        current_group.set(e.get(e.curselection()))
+        if e.curselection() != ():
+            #Doesn't cause error if you click on a askstring dialog box
+            group = e.get(e.curselection())
+            if toggle_filepath_state.get() is True:
+                file_list.set([k for k, v in groups[group].items()])
+            else:
+                file_list.set([v for k, v in groups[group].items()])
+            current_group.set(e.get(e.curselection()))
 
     group_listbox.bind('<<ListboxSelect>>', group_listbox_on_select)
 
