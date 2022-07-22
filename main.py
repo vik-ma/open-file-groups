@@ -103,7 +103,7 @@ def draw_gui():
     autoclose_checkbox = tk.Checkbutton(text="Close Program After Opening", variable=autoclose, onvalue=True, offvalue=False)
     save_group_checkbox = tk.Checkbutton(text="Automatically select current group next time program is opened", variable=save_group, onvalue=True, offvalue=False)
     
-    autoclose_checkbox.place(x=365, y=1)
+    autoclose_checkbox.place(x=1, y=21)
     save_group_checkbox.place(x=1, y=1)
 
     remove_warn_group = tk.BooleanVar(value=groups["_SETTINGS_"]["remove_warn_group"])
@@ -405,8 +405,8 @@ def draw_gui():
             messagebox.showerror("Error", "Must select a group to open from!")
 
     open_button = tk.Button(text="Open Files", bg="#3599e6", fg="#1c1c1c", 
-                            font="arial 17 bold", command=open_files)
-    open_button.place(x=557, y=2)
+                            font="arial 16 bold", command=open_files)
+    open_button.place(x=570, y=3)
 
     def check_vlcrc(path):
         if pathlib.Path(path).exists() and path[-5::] == "vlcrc":
