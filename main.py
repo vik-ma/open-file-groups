@@ -97,18 +97,24 @@ def draw_gui():
 
     autoclose = tk.BooleanVar(value=groups["_SETTINGS_"]["autoclose"])
     save_group = tk.BooleanVar(value=groups["_SETTINGS_"]["save_group"])
-    remove_warn_group = tk.BooleanVar(value=groups["_SETTINGS_"]["remove_warn_group"])
-    remove_warn_files = tk.BooleanVar(value=groups["_SETTINGS_"]["remove_warn_files"])
 
     autoclose_checkbox = tk.Checkbutton(text="Close Program After Opening", variable=autoclose, onvalue=True, offvalue=False)
     save_group_checkbox = tk.Checkbutton(text="Automatically select current group next time program is opened", variable=save_group, onvalue=True, offvalue=False)
+    
+    autoclose_checkbox.place(x=370, y=1)
+    save_group_checkbox.place(x=1, y=1)
+
+    remove_warn_group = tk.BooleanVar(value=groups["_SETTINGS_"]["remove_warn_group"])
+    remove_warn_files = tk.BooleanVar(value=groups["_SETTINGS_"]["remove_warn_files"])
+    
     warn_group_checkbox = tk.Checkbutton(text="Warn before trying to delete group", variable=remove_warn_group, onvalue=True, offvalue=False)
     warn_files_checkbox = tk.Checkbutton(text="Warn before trying to delete file or folder", variable=remove_warn_files, onvalue=True, offvalue=False)
+    
+    warn_group_checkbox.place(x=1, y=265)
+    warn_files_checkbox.place(x=326, y=265)
 
-    autoclose_checkbox.place(x=5, y=5)
-    save_group_checkbox.place(x=5, y=25)
-    warn_group_checkbox.place(x=5, y=45)
-    warn_files_checkbox.place(x=5, y=65)
+
+
 
     def add_group():
         new_group = askstring("New Group", "Name file group:")
@@ -182,9 +188,9 @@ def draw_gui():
     current_group = StringVar(value=groups["_SETTINGS_"]["saved_group"])
 
     selected_group_label = tk.Label(text="Selected Group:", font="arial 13 bold")
-    selected_group_label.place(x=330, y=20)
+    selected_group_label.place(x=330, y=24)
     current_group_label = tk.Label(textvariable=current_group, font="arial 13 bold", fg="#166edb")
-    current_group_label.place(x=330, y=40)
+    current_group_label.place(x=330, y=44)
 
     file_list = StringVar()
     file_listbox = tk.Listbox(listvariable=file_list, width=43, selectmode="SINGLE", exportselection=False, activestyle="none")
@@ -397,8 +403,8 @@ def draw_gui():
             messagebox.showerror("Error", "Must select a group to open from!")
 
     open_button = tk.Button(text="Open Files", bg="#3599e6", fg="#1c1c1c", 
-                            font="arial 18 bold", command=open_files)
-    open_button.place(x=547, y=7)
+                            font="arial 17 bold", command=open_files)
+    open_button.place(x=557, y=2)
 
     def check_vlcrc(path):
         if pathlib.Path(path).exists() and path[-5::] == "vlcrc":
@@ -501,7 +507,6 @@ def draw_gui():
     vlc_restore_vlcrc_button = tk.Button(text="Restore Default Path", command=vlcrc_restore)
     vlc_restore_vlcrc_button.place(x=577, y=302)
 
-    #+137 +109
     def check_checkboxes(): 
         """Update value of checkboxes if any change has been made."""
         if groups["_SETTINGS_"]["autoclose"] != autoclose.get():
