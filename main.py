@@ -123,18 +123,18 @@ def draw_gui():
                     listbox_update_selection("Group", index)
 
     def move_group_up(lower):
-        if (lower != None):
+        if lower != None:
             lower_int = lower[0]
             upper_int = lower_int-1
-            if (lower_int > 0):
+            if lower_int > 0:
                 change_group_position(upper_int, lower_int)
                 listbox_update_selection("Group", upper_int)
     
     def move_group_down(upper):
-        if (upper != None):
+        if upper != None:
             upper_int = upper[0]
             lower_int = upper_int+1
-            if (upper_int < len(groups)-2):
+            if upper_int < len(groups) - 2:
                 change_group_position(upper_int, lower_int)
                 listbox_update_selection("Group", lower_int)
 
@@ -245,18 +245,18 @@ def draw_gui():
             messagebox.showerror("Error", "Select a group to add folder to first!")
 
     def move_file_up(lower, group):
-        if (lower != None and group != None):
+        if lower != None and group != None:
             lower_int = lower
             upper_int = lower_int-1
-            if (lower_int > 0):
+            if lower_int > 0:
                 change_file_position(upper_int, lower_int, group)
                 listbox_update_selection("Files", upper_int)
 
     def move_file_down(upper, group):
-        if (upper != None and group != None):
+        if upper != None and group != None:
             upper_int = upper
             lower_int = upper_int+1
-            if (upper_int < len(groups[group])-1):
+            if upper_int < len(groups[group]) - 1:
                 change_file_position(upper_int, lower_int, group)
                 listbox_update_selection("Files", lower_int)
 
@@ -323,7 +323,7 @@ def draw_gui():
                         index = i
                 write_json(groups)
                 update_file_list()
-                if (get_file_selection() != None):
+                if get_file_selection() != None:
                     listbox_update_selection("Files", index)
 
     warn_group_checkbox = tk.Checkbutton(text="Warn before trying to delete group", variable=remove_warn_group, onvalue=True, offvalue=False)
