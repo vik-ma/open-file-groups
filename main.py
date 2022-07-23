@@ -389,7 +389,6 @@ def draw_gui():
                         messagebox.showerror("Error", f"Cannot open {k}!")
                 if autoclose.get() is True:
                     check_checkboxes()
-                    close()
         else:
             messagebox.showerror("Error", "Must select a group to open from!")    
 
@@ -522,6 +521,7 @@ def draw_gui():
         if groups["_SETTINGS_"]["remove_warn_files"] != remove_warn_files.get():
             groups["_SETTINGS_"]["remove_warn_files"] = remove_warn_files.get()
         write_json(groups)
+        close()
 
     def close():
         if save_group.get() is True:
@@ -531,7 +531,7 @@ def draw_gui():
         write_json(groups)
         root.destroy()    
 
-    root.protocol("WM_DELETE_WINDOW", lambda:[check_checkboxes(), close()])
+    root.protocol("WM_DELETE_WINDOW", lambda:[check_checkboxes()])
 
     root.mainloop()
 
