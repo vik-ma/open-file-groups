@@ -66,8 +66,11 @@ def draw_gui():
     move_group_down_button = tk.Button(text="Move Group Down", command=lambda:[move_group_down(get_group_index())])
     move_group_down_button.place(x=203, y=160, width=gbw)
 
+    copy_group_button = tk.Button(text="Copy Group", command=lambda:[copy_group(get_group_index())])
+    copy_group_button.place(x=203, y=190, width=gbw)
+
     remove_group_button = tk.Button(text="Delete Group", command=lambda:[remove_group(get_group_selection())])
-    remove_group_button.place(x=203, y=190, width=gbw)
+    remove_group_button.place(x=203, y=220, width=gbw)
     
     add_file_button = tk.Button(text="Add File", command=lambda:[add_file(current_group.get())])
     add_file_button.place(x=590, y=70, width=fbw)
@@ -137,6 +140,8 @@ def draw_gui():
             if upper_int < len(groups) - 2:
                 change_group_position(upper_int, lower_int)
                 listbox_update_selection("Group", lower_int)
+
+
 
     def remove_group(group):
         if group != None:
