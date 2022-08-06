@@ -66,7 +66,7 @@ def draw_gui():
     move_group_down_button = tk.Button(text="Move Group Down", command=lambda:[move_group_down(get_group_index())])
     move_group_down_button.place(x=203, y=160, width=gbw)
 
-    copy_group_button = tk.Button(text="Copy Group", command=lambda:[copy_group(get_group_index())])
+    copy_group_button = tk.Button(text="Copy Group", command=lambda:[copy_group(get_group_selection())])
     copy_group_button.place(x=203, y=190, width=gbw)
 
     remove_group_button = tk.Button(text="Delete Group", command=lambda:[remove_group(get_group_selection())])
@@ -141,6 +141,19 @@ def draw_gui():
                 change_group_position(upper_int, lower_int)
                 listbox_update_selection("Group", lower_int)
 
+    def copy_group(group):
+        if group != None:
+            new_group = askstring("Copy Group", "Name file group:")
+            if new_group != None:
+                if new_group in groups:
+                    messagebox.showerror("Error", "A group with that name already exists!")
+                else:
+                    groups[new_group] = groups[group]
+                    write_json(groups)
+                    update_group_list()
+                    current_group.set(new_group)
+                    listbox_update_selection("Group", len(groups)-2)
+                    update_file_list()
 
 
     def remove_group(group):
