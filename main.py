@@ -14,7 +14,7 @@ def write_json(write_to_json):
     with open ("saved_groups.json", "w") as file:
         json.dump(write_to_json, file, indent=2, ensure_ascii=False)
 
-def draw_gui():
+def main():
     """Construct the GUI for the application."""
     root = tk.Tk()
     root.title("Open Group Of Files")
@@ -553,25 +553,25 @@ def draw_gui():
 
     root.mainloop()
 
-
-if has_json:
-    with open ("saved_groups.json", "r", encoding="utf-8") as file:
-        groups = json.load(file)
-    draw_gui()
-else:
-    vlcrc = f"{HOMEFOLDER}\\AppData\\Roaming\\vlc\\vlcrc"
-    settings = {
-        "show_full_filepath": True,
-        "lastdir": str(DESKTOP),
-        "vlcrc_path": vlcrc,
-        "saved_group": "None",
-        "save_group": False,
-        "autoclose": False,
-        "remove_warn_group": False,
-        "remove_warn_files": True
-        }
-    json_content = {"_SETTINGS_":settings}
-    write_json(json_content)
-    with open ("saved_groups.json", "r", encoding="utf-8") as file:
-        groups = json.load(file)
-    draw_gui()
+if __name__ == "__main__":
+    if has_json:
+        with open ("saved_groups.json", "r", encoding="utf-8") as file:
+            groups = json.load(file)
+        main()
+    else:
+        vlcrc = f"{HOMEFOLDER}\\AppData\\Roaming\\vlc\\vlcrc"
+        settings = {
+            "show_full_filepath": True,
+            "lastdir": str(DESKTOP),
+            "vlcrc_path": vlcrc,
+            "saved_group": "None",
+            "save_group": False,
+            "autoclose": False,
+            "remove_warn_group": False,
+            "remove_warn_files": True
+            }
+        json_content = {"_SETTINGS_":settings}
+        write_json(json_content)
+        with open ("saved_groups.json", "r", encoding="utf-8") as file:
+            groups = json.load(file)
+        main()
