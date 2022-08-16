@@ -103,7 +103,7 @@ def main():
     remove_entry_button.place(x=590, y=190, width=fbw)
 
     #List to store names of all groups in saved_groups.json
-    #Every dictionary in json represents one group except for the first dictionary, which stores the settings for the application
+    #Every dictionary in json represents one group except for the first dictionary, which stores the user settings for the application
     group_list = StringVar(value=[group for group in groups][1::])
     #Listbox to list all groups saved in saved_groups.json
     group_listbox = Listbox(listvariable=group_list, width=32, selectmode="SINGLE", exportselection=True, activestyle="none")
@@ -240,12 +240,15 @@ def main():
         if file_listbox.curselection() != ():
             return file_listbox.curselection()[0]
 
+    #Title label for file_listbox
     selected_group_label = Label(text="Selected Group:", font="arial 13 bold")
     selected_group_label.place(x=323, y=24)
+    #Label to show currently selected group
     current_group_label = Label(textvariable=current_group, font="arial 13 bold", fg="#166edb")
     current_group_label.place(x=324, y=44)
 
     file_list = StringVar()
+    #Listbox to list all saved files and folders in currently selected group
     file_listbox = Listbox(listvariable=file_list, width=43, selectmode="SINGLE", exportselection=False, activestyle="none")
     file_listbox.place(x=326, y=70)
 
@@ -431,14 +434,17 @@ def main():
     vlc_settings_title_label = Label(text="VLC Media Player Settings", font="arial 13 bold", fg="#fc8c03")
     vlc_settings_title_label.place(x=4, y=303)
     
-    show_vlcrc_path = StringVar(value=f"VLC Settings file: {vlcrcpath.get()}")
 
+    show_vlcrc_path = StringVar(value=f"VLC Settings file: {vlcrcpath.get()}")
+    #Label that shows the current set path to VLC Settings file (vlcrc)
     vlcrc_path_label = Label(textvariable=show_vlcrc_path, font="arial 8 bold")
     vlcrc_path_label.place(x=4, y=327)
 
+    #Label that describes the purpose of VLC Media Player Settings section
     vlc_settings_desc_label = Label(text="When opening media files in VLC Media Player, it is recommended to\nstart the media files paused and to allow more than one instance of\nVLC Media Player to be active. You can turn these features on or off here.", justify="left")
     vlc_settings_desc_label.place(x=4, y=346)
 
+    #Lines/values in vlcrc-file which corresponds to their settings
     vlc_paused = "start-paused="
     vlc_mult_inst = "one-instance-when-started-from-file="
 
@@ -448,6 +454,7 @@ def main():
     vlc_one_instance_label = Label(text="Allow Only One Instance:", font="arial 9 bold")
     vlc_one_instance_label.place(x=406, y=372)
 
+    #Buttons to change settings in vlcrc file
     vlc_pause_on_button = Button(text="Turn On", command=lambda:[vlc_button_command(vlc_paused, 1, 0)], font="segoeui 8")
     vlc_pause_off_button = Button(text="Turn Off", command=lambda:[vlc_button_command(vlc_paused, 0, 1)], font="segoeui 8")
 
@@ -459,15 +466,19 @@ def main():
     vlc_multiple_on_button.place(x=595, y=370)
     vlc_multiple_off_button.place(x=645, y=370)
 
+    #Buttons to check specific values of settings in vlcrc file
     vlc_check_pause_button = Button(text="Check", command=lambda:[vlc_button_command(vlc_paused)], font="segoeui 8")
     vlc_check_pause_button.place(x=554, y=343)
     vlc_check_multiple_button = Button(text="Check", command=lambda:[vlc_button_command(vlc_mult_inst)], font="segoeui 8")
     vlc_check_multiple_button.place(x=554, y=370)
 
+    #Button to check if current path to vlcrc file valid
     vlc_check_vlcrc_button = Button(text="Check if vlcrc file exists", command=lambda:[check_vlrc_exists()])
     vlc_check_vlcrc_button.place(x=330, y=302)
+    #Button for user to specify custom path to vlcrc file
     vlc_add_vlcrc_button = Button(text="Add Custom Path", command=lambda:[vlcrc_select_dir()])
     vlc_add_vlcrc_button.place(x=467, y=302)
+    #Button to set the path to vlcrc to it's default value
     vlc_restore_vlcrc_button = Button(text="Restore Default Path", command=lambda:[vlcrc_restore()])
     vlc_restore_vlcrc_button.place(x=577, y=302)
 
