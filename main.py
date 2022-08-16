@@ -35,9 +35,9 @@ def main():
     #Path to vlc_rc (VLC settings file)
     vlcrcpath = StringVar(value=groups["_SETTINGS_"]["vlcrc_path"])
     #Boolean to allow deletion of groups without messagebox warning if set to True
-    remove_warn_group = tk.BooleanVar(value=groups["_SETTINGS_"]["remove_warn_group"])
+    remove_warn_group = BooleanVar(value=groups["_SETTINGS_"]["remove_warn_group"])
     #Boolean to allow deletion of file or folder without messagebox warning if set to True
-    remove_warn_files = tk.BooleanVar(value=groups["_SETTINGS_"]["remove_warn_files"])
+    remove_warn_files = BooleanVar(value=groups["_SETTINGS_"]["remove_warn_files"])
     #Name of currently selected group
     current_group = StringVar(value=groups["_SETTINGS_"]["saved_group"])
     #Boolean to show full filepath name to file/folder if True. Shows shortened path if False
@@ -47,8 +47,9 @@ def main():
     vlc_settings_frame = tk.Frame(height=299, width=702, highlightbackground="black", highlightthickness=1)
     vlc_settings_frame.place(x=-1, y=-1)
     
-    autoclose = tk.BooleanVar(value=groups["_SETTINGS_"]["autoclose"])
-    save_group = tk.BooleanVar(value=groups["_SETTINGS_"]["save_group"])
+
+    autoclose = BooleanVar(value=groups["_SETTINGS_"]["autoclose"])
+    save_group = BooleanVar(value=groups["_SETTINGS_"]["save_group"])
 
     autoclose_checkbox = tk.Checkbutton(text="Close Program After Opening", variable=autoclose, onvalue=True, offvalue=False)
     save_group_checkbox = tk.Checkbutton(text="Automatically select current group next time program is opened", variable=save_group, onvalue=True, offvalue=False)
@@ -575,7 +576,7 @@ if __name__ == "__main__":
             "saved_group": "None",
             "save_group": False,
             "autoclose": False,
-            "remove_warn_group": False,
+            "remove_warn_group": True,
             "remove_warn_files": True
             }
         json_content = {"_SETTINGS_":settings}
