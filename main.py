@@ -11,6 +11,7 @@ HOMEFOLDER = pathlib.Path.home()
 has_json = pathlib.Path("saved_groups.json").exists()
 
 def write_json(write_to_json):
+    """Write changed values to saved_groups.json."""
     with open ("saved_groups.json", "w") as file:
         json.dump(write_to_json, file, indent=2, ensure_ascii=False)
 
@@ -29,16 +30,20 @@ def main():
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     root.resizable(width=False, height=False)
 
+    #Directory where last file or folder opened was contained in
     lastdir = StringVar(value=groups["_SETTINGS_"]["lastdir"])
+    #Path to vlc_rc (VLC settings file)
     vlcrcpath = StringVar(value=groups["_SETTINGS_"]["vlcrc_path"])
+    #Boolean to allow deletion of groups without messagebox warning if set to True
     remove_warn_group = tk.BooleanVar(value=groups["_SETTINGS_"]["remove_warn_group"])
+    #Boolean to allow deletion of file or folder without messagebox warning if set to True
     remove_warn_files = tk.BooleanVar(value=groups["_SETTINGS_"]["remove_warn_files"])
+    #Name of currently selected group
     current_group = StringVar(value=groups["_SETTINGS_"]["saved_group"])
+    #Boolean to show full filepath name to file/folder if True. Shows shortened path if False
     toggle_filepath_state = BooleanVar(value=groups["_SETTINGS_"]["show_full_filepath"])
 
-    vlc_settings_frame = tk.Frame(height=299, width=702, highlightbackground="black", highlightthickness=1)
-    vlc_settings_frame.place(x=-1, y=-1)
-
+    
     autoclose = tk.BooleanVar(value=groups["_SETTINGS_"]["autoclose"])
     save_group = tk.BooleanVar(value=groups["_SETTINGS_"]["save_group"])
 
@@ -50,6 +55,10 @@ def main():
 
     created_groups_label = tk.Label(text="Created Groups:", font="arial 13 bold")
     created_groups_label.place(x=3, y=44)
+
+    #Line to separate VLC Settings section from main section
+    vlc_settings_frame = tk.Frame(height=299, width=702, highlightbackground="black", highlightthickness=1)
+    vlc_settings_frame.place(x=-1, y=-1)
 
     gbw = 120
     fbw = 105
