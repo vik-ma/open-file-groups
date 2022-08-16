@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import BooleanVar, StringVar, filedialog, messagebox
+from tkinter import BooleanVar, StringVar, filedialog, messagebox, Frame, Checkbutton, Label, Button, Listbox
 from tkinter.simpledialog import askstring
 import pathlib
 import os
@@ -44,60 +44,60 @@ def main():
     toggle_filepath_state = BooleanVar(value=groups["_SETTINGS_"]["show_full_filepath"])
 
     #Line to separate VLC Settings section from main section
-    vlc_settings_frame = tk.Frame(height=299, width=702, highlightbackground="black", highlightthickness=1)
+    vlc_settings_frame = Frame(height=299, width=702, highlightbackground="black", highlightthickness=1)
     vlc_settings_frame.place(x=-1, y=-1)
     
 
     autoclose = BooleanVar(value=groups["_SETTINGS_"]["autoclose"])
     save_group = BooleanVar(value=groups["_SETTINGS_"]["save_group"])
 
-    autoclose_checkbox = tk.Checkbutton(text="Close Program After Opening", variable=autoclose, onvalue=True, offvalue=False)
-    save_group_checkbox = tk.Checkbutton(text="Automatically select current group next time program is opened", variable=save_group, onvalue=True, offvalue=False)
+    autoclose_checkbox = Checkbutton(text="Close Program After Opening", variable=autoclose, onvalue=True, offvalue=False)
+    save_group_checkbox = Checkbutton(text="Automatically select current group next time program is opened", variable=save_group, onvalue=True, offvalue=False)
     
     autoclose_checkbox.place(x=1, y=21)
     save_group_checkbox.place(x=1, y=1)
 
-    created_groups_label = tk.Label(text="Created Groups:", font="arial 13 bold")
+    created_groups_label = Label(text="Created Groups:", font="arial 13 bold")
     created_groups_label.place(x=3, y=44)
 
     gbw = 120
     fbw = 105
 
-    add_group_button = tk.Button(text="Create New Group", command=lambda:[add_group()])
+    add_group_button = Button(text="Create New Group", command=lambda:[add_group()])
     add_group_button.place(x=203, y=70, width=gbw)
         
-    rename_group_button = tk.Button(text="Rename Group", command=lambda:[rename_group(get_group_selection())])
+    rename_group_button = Button(text="Rename Group", command=lambda:[rename_group(get_group_selection())])
     rename_group_button.place(x=203, y=100, width=gbw)
 
-    move_group_up_button = tk.Button(text="Move Group Up", command=lambda:[move_group_up(get_group_index())])
+    move_group_up_button = Button(text="Move Group Up", command=lambda:[move_group_up(get_group_index())])
     move_group_up_button.place(x=203, y=130, width=gbw)
 
-    move_group_down_button = tk.Button(text="Move Group Down", command=lambda:[move_group_down(get_group_index())])
+    move_group_down_button = Button(text="Move Group Down", command=lambda:[move_group_down(get_group_index())])
     move_group_down_button.place(x=203, y=160, width=gbw)
 
-    copy_group_button = tk.Button(text="Copy Group", command=lambda:[copy_group(get_group_selection())])
+    copy_group_button = Button(text="Copy Group", command=lambda:[copy_group(get_group_selection())])
     copy_group_button.place(x=203, y=190, width=gbw)
 
-    remove_group_button = tk.Button(text="Delete Group", command=lambda:[remove_group(get_group_selection())])
+    remove_group_button = Button(text="Delete Group", command=lambda:[remove_group(get_group_selection())])
     remove_group_button.place(x=203, y=220, width=gbw)
     
-    add_file_button = tk.Button(text="Add File", command=lambda:[add_file(current_group.get())])
+    add_file_button = Button(text="Add File", command=lambda:[add_file(current_group.get())])
     add_file_button.place(x=590, y=70, width=fbw)
 
-    add_folder_button = tk.Button(text="Add Folder", command=lambda:[add_folder(current_group.get())])
+    add_folder_button = Button(text="Add Folder", command=lambda:[add_folder(current_group.get())])
     add_folder_button.place(x=590, y=100, width=fbw)
     
-    move_file_up_button = tk.Button(text="Move Entry Up", command=lambda:[move_file_up(get_file_selection(), get_group_selection())])
+    move_file_up_button = Button(text="Move Entry Up", command=lambda:[move_file_up(get_file_selection(), get_group_selection())])
     move_file_up_button.place(x=590, y=130, width=fbw)
 
-    move_file_down_button = tk.Button(text="Move Entry Down", command=lambda:[move_file_down(get_file_selection(), get_group_selection())])
+    move_file_down_button = Button(text="Move Entry Down", command=lambda:[move_file_down(get_file_selection(), get_group_selection())])
     move_file_down_button.place(x=590, y=160, width=fbw)
 
-    remove_entry_button = tk.Button(text="Remove Entry", command=lambda:[remove_entry(get_file_selection(), current_group.get())])
+    remove_entry_button = Button(text="Remove Entry", command=lambda:[remove_entry(get_file_selection(), current_group.get())])
     remove_entry_button.place(x=590, y=190, width=fbw)
 
     group_list = StringVar(value=[group for group in groups][1::])
-    group_listbox = tk.Listbox(listvariable=group_list, width=32, selectmode="SINGLE", exportselection=True, activestyle="none")
+    group_listbox = Listbox(listvariable=group_list, width=32, selectmode="SINGLE", exportselection=True, activestyle="none")
     group_listbox.place(x=5, y=70)
 
     def add_group():
@@ -231,13 +231,13 @@ def main():
         if file_listbox.curselection() != ():
             return file_listbox.curselection()[0]
 
-    selected_group_label = tk.Label(text="Selected Group:", font="arial 13 bold")
+    selected_group_label = Label(text="Selected Group:", font="arial 13 bold")
     selected_group_label.place(x=323, y=24)
-    current_group_label = tk.Label(textvariable=current_group, font="arial 13 bold", fg="#166edb")
+    current_group_label = Label(textvariable=current_group, font="arial 13 bold", fg="#166edb")
     current_group_label.place(x=324, y=44)
 
     file_list = StringVar()
-    file_listbox = tk.Listbox(listvariable=file_list, width=43, selectmode="SINGLE", exportselection=False, activestyle="none")
+    file_listbox = Listbox(listvariable=file_list, width=43, selectmode="SINGLE", exportselection=False, activestyle="none")
     file_listbox.place(x=326, y=70)
 
     def add_file(group):
@@ -353,16 +353,16 @@ def main():
                 if get_file_selection() != None:
                     listbox_update_selection("Files", index)
 
-    warn_group_checkbox = tk.Checkbutton(text="Warn before trying to delete group", variable=remove_warn_group, onvalue=True, offvalue=False)
-    warn_files_checkbox = tk.Checkbutton(text="Warn before trying to delete file or folder", variable=remove_warn_files, onvalue=True, offvalue=False)
+    warn_group_checkbox = Checkbutton(text="Warn before trying to delete group", variable=remove_warn_group, onvalue=True, offvalue=False)
+    warn_files_checkbox = Checkbutton(text="Warn before trying to delete file or folder", variable=remove_warn_files, onvalue=True, offvalue=False)
     
     warn_group_checkbox.place(x=1, y=265)
     warn_files_checkbox.place(x=326, y=265)
 
-    sort_groups_button = tk.Button(text="Sort Groups Alphabetically", command=lambda:[sort_groups()])
+    sort_groups_button = Button(text="Sort Groups Alphabetically", command=lambda:[sort_groups()])
     sort_groups_button.place(x=5, y=237)
 
-    sort_files_button = tk.Button(text="Sort Files/Folders Alphabetically", command=lambda:[sort_files()])
+    sort_files_button = Button(text="Sort Files/Folders Alphabetically", command=lambda:[sort_files()])
     sort_files_button.place(x=326, y=237)
 
     toggle_filepath_button_text = StringVar()
@@ -375,7 +375,7 @@ def main():
 
     show_filepath_button(toggle_filepath_state.get())
 
-    toggle_filepath_button = tk.Button(textvariable=toggle_filepath_button_text, command=lambda:[toggle_filepath()])
+    toggle_filepath_button = Button(textvariable=toggle_filepath_button_text, command=lambda:[toggle_filepath()])
     toggle_filepath_button.place(x=509, y=237)
 
     def toggle_filepath():
@@ -390,7 +390,7 @@ def main():
         write_json(groups)
         update_file_list()
 
-    open_button = tk.Button(text="Open Files", bg="#3599e6", fg="#1c1c1c", 
+    open_button = Button(text="Open Files", bg="#3599e6", fg="#1c1c1c", 
                             font="arial 16 bold", command=lambda:[open_files()])
     open_button.place(x=570, y=3)
 
@@ -419,47 +419,47 @@ def main():
         else:
             messagebox.showerror("Error", "Must select a group to open from!")    
 
-    vlc_settings_title_label = tk.Label(text="VLC Media Player Settings", font="arial 13 bold", fg="#fc8c03")
+    vlc_settings_title_label = Label(text="VLC Media Player Settings", font="arial 13 bold", fg="#fc8c03")
     vlc_settings_title_label.place(x=4, y=303)
     
     show_vlcrc_path = StringVar(value=f"VLC Settings file: {vlcrcpath.get()}")
 
-    vlcrc_path_label = tk.Label(textvariable=show_vlcrc_path, font="arial 8 bold")
+    vlcrc_path_label = Label(textvariable=show_vlcrc_path, font="arial 8 bold")
     vlcrc_path_label.place(x=4, y=327)
 
-    vlc_settings_desc_label = tk.Label(text="When opening media files in VLC Media Player, it is recommended to\nstart the media files paused and to allow more than one instance of\nVLC Media Player to be active. You can turn these features on or off here.", justify="left")
+    vlc_settings_desc_label = Label(text="When opening media files in VLC Media Player, it is recommended to\nstart the media files paused and to allow more than one instance of\nVLC Media Player to be active. You can turn these features on or off here.", justify="left")
     vlc_settings_desc_label.place(x=4, y=346)
 
     vlc_paused = "start-paused="
     vlc_mult_inst = "one-instance-when-started-from-file="
 
-    vlc_start_paused_label = tk.Label(text="Start Paused:", font="arial 9 bold")
+    vlc_start_paused_label = Label(text="Start Paused:", font="arial 9 bold")
     vlc_start_paused_label.place(x=469, y=346)
 
-    vlc_one_instance_label = tk.Label(text="Allow Only One Instance:", font="arial 9 bold")
+    vlc_one_instance_label = Label(text="Allow Only One Instance:", font="arial 9 bold")
     vlc_one_instance_label.place(x=406, y=372)
 
-    vlc_pause_on_button = tk.Button(text="Turn On", command=lambda:[vlc_button_command(vlc_paused, 1, 0)], font="segoeui 8")
-    vlc_pause_off_button = tk.Button(text="Turn Off", command=lambda:[vlc_button_command(vlc_paused, 0, 1)], font="segoeui 8")
+    vlc_pause_on_button = Button(text="Turn On", command=lambda:[vlc_button_command(vlc_paused, 1, 0)], font="segoeui 8")
+    vlc_pause_off_button = Button(text="Turn Off", command=lambda:[vlc_button_command(vlc_paused, 0, 1)], font="segoeui 8")
 
-    vlc_multiple_on_button = tk.Button(text="Turn On", command=lambda:[vlc_button_command(vlc_mult_inst, 1, 0)], font="segoeui 8")
-    vlc_multiple_off_button = tk.Button(text="Turn Off", command=lambda:[vlc_button_command(vlc_mult_inst, 0, 1)], font="segoeui 8")
+    vlc_multiple_on_button = Button(text="Turn On", command=lambda:[vlc_button_command(vlc_mult_inst, 1, 0)], font="segoeui 8")
+    vlc_multiple_off_button = Button(text="Turn Off", command=lambda:[vlc_button_command(vlc_mult_inst, 0, 1)], font="segoeui 8")
 
     vlc_pause_on_button.place(x=595, y=343)
     vlc_pause_off_button.place(x=645, y=343)
     vlc_multiple_on_button.place(x=595, y=370)
     vlc_multiple_off_button.place(x=645, y=370)
 
-    vlc_check_pause_button = tk.Button(text="Check", command=lambda:[vlc_button_command(vlc_paused)], font="segoeui 8")
+    vlc_check_pause_button = Button(text="Check", command=lambda:[vlc_button_command(vlc_paused)], font="segoeui 8")
     vlc_check_pause_button.place(x=554, y=343)
-    vlc_check_multiple_button = tk.Button(text="Check", command=lambda:[vlc_button_command(vlc_mult_inst)], font="segoeui 8")
+    vlc_check_multiple_button = Button(text="Check", command=lambda:[vlc_button_command(vlc_mult_inst)], font="segoeui 8")
     vlc_check_multiple_button.place(x=554, y=370)
 
-    vlc_check_vlcrc_button = tk.Button(text="Check if vlcrc file exists", command=lambda:[check_vlrc_exists()])
+    vlc_check_vlcrc_button = Button(text="Check if vlcrc file exists", command=lambda:[check_vlrc_exists()])
     vlc_check_vlcrc_button.place(x=330, y=302)
-    vlc_add_vlcrc_button = tk.Button(text="Add Custom Path", command=lambda:[vlcrc_select_dir()])
+    vlc_add_vlcrc_button = Button(text="Add Custom Path", command=lambda:[vlcrc_select_dir()])
     vlc_add_vlcrc_button.place(x=467, y=302)
-    vlc_restore_vlcrc_button = tk.Button(text="Restore Default Path", command=lambda:[vlcrc_restore()])
+    vlc_restore_vlcrc_button = Button(text="Restore Default Path", command=lambda:[vlcrc_restore()])
     vlc_restore_vlcrc_button.place(x=577, y=302)
 
     def check_vlcrc(path):
@@ -576,7 +576,7 @@ if __name__ == "__main__":
             "saved_group": "None",
             "save_group": False,
             "autoclose": False,
-            "remove_warn_group": True,
+            "remove_warn_group": False,
             "remove_warn_files": True
             }
         json_content = {"_SETTINGS_":settings}
