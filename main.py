@@ -40,15 +40,16 @@ def main():
     remove_warn_files = BooleanVar(value=groups["_SETTINGS_"]["remove_warn_files"])
     #Name of currently selected group
     current_group = StringVar(value=groups["_SETTINGS_"]["saved_group"])
-    #Boolean to show full filepath name to file/folder if True. Shows shortened path if False
+    #Boolean to show full filepath name to file/folder if set to True. Shows shortened path if set to False
     toggle_filepath_state = BooleanVar(value=groups["_SETTINGS_"]["show_full_filepath"])
 
     #Line to separate VLC Settings section from main section
     vlc_settings_frame = Frame(height=299, width=702, highlightbackground="black", highlightthickness=1)
     vlc_settings_frame.place(x=-1, y=-1)
     
-
+    #Boolean to automatically close application after opening files if set to True
     autoclose = BooleanVar(value=groups["_SETTINGS_"]["autoclose"])
+    #Boolean to automatically select group saved in "saved_group" setting in json when application is launched if set to True
     save_group = BooleanVar(value=groups["_SETTINGS_"]["save_group"])
 
     autoclose_checkbox = Checkbutton(text="Close Program After Opening", variable=autoclose, onvalue=True, offvalue=False)
@@ -57,12 +58,16 @@ def main():
     autoclose_checkbox.place(x=1, y=21)
     save_group_checkbox.place(x=1, y=1)
 
+    #Title label for group_listbox
     created_groups_label = Label(text="Created Groups:", font="arial 13 bold")
     created_groups_label.place(x=3, y=44)
 
+    #Group Button Width
     gbw = 120
+    #File/Folder Button Width
     fbw = 105
 
+    #Buttons relating to Groups
     add_group_button = Button(text="Create New Group", command=lambda:[add_group()])
     add_group_button.place(x=203, y=70, width=gbw)
         
@@ -81,6 +86,7 @@ def main():
     remove_group_button = Button(text="Delete Group", command=lambda:[remove_group(get_group_selection())])
     remove_group_button.place(x=203, y=220, width=gbw)
     
+    #Buttons relating to Files/Folders
     add_file_button = Button(text="Add File", command=lambda:[add_file(current_group.get())])
     add_file_button.place(x=590, y=70, width=fbw)
 
@@ -96,7 +102,10 @@ def main():
     remove_entry_button = Button(text="Remove Entry", command=lambda:[remove_entry(get_file_selection(), current_group.get())])
     remove_entry_button.place(x=590, y=190, width=fbw)
 
+    #List to store names of all groups in saved_groups.json
+    #Every dictionary in json represents one group except for the first dictionary, which stores the settings for the application
     group_list = StringVar(value=[group for group in groups][1::])
+    #Listbox to list all groups saved in saved_groups.json
     group_listbox = Listbox(listvariable=group_list, width=32, selectmode="SINGLE", exportselection=True, activestyle="none")
     group_listbox.place(x=5, y=70)
 
