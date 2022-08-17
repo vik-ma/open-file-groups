@@ -253,7 +253,7 @@ def main():
                 listbox_update_selection("Group", index)
 
     def update_group_list():
-        """Populate group_list with every item in groups except first key in json."""
+        """Populate group_list with every item in json file except first key in json."""
         group_list.set([group for group in groups][1::])
 
     def group_listbox_on_select(event):
@@ -385,11 +385,16 @@ def main():
         update_file_list()
 
     def remove_entry(entry, group):
+        """Delete file or folder entry from selected group."""
         if entry != None:
+            #Do nothing if no item is selected
+            #Create indexed list of items in selected group
             get_index = list(groups[group])
+            #Get name of selected item based on index of item in file_listbox
             get_entry = groups[group][get_index[entry]]
             msgbox_warning = ""
             if remove_warn_files.get() is True:
+                #Send warning messagebox before deleting if remove_warn_files is set to True
                 msgbox_warning = messagebox.askquestion("Warning", f"Do you really want to remove {get_entry}?")
             if msgbox_warning == "yes" or remove_warn_files.get() is False:
                 del groups[group][get_index[entry]]
@@ -397,13 +402,19 @@ def main():
                 update_file_list()
 
     def update_file_list():
+        """Populate file_list with every item in selected group."""
         if current_group.get() != "":
+            #Do nothing if no group is selected
             if current_group.get() in groups:
+                #Populate file_list with every item in selected group
                 if toggle_filepath_state.get() is True:
+                    #Show full filepath if toggle_filepath_state is True
                     file_list.set([k for k, v in groups[current_group.get()].items()])
                 else:
+                    #Show shortened filepath names if False
                     file_list.set([v for k, v in groups[current_group.get()].items()])
             else:
+                #Set file_list as empty list if no items in selected group
                 file_list.set([])
 
     def get_key(list):
