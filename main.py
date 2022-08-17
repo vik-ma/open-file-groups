@@ -158,7 +158,7 @@ def main():
                     listbox_update_selection("Group", index)
 
     def move_group_up(lower):
-        """Move group up one step in listbox and json file."""
+        """Move group up one step in group_listbox and json file."""
         if lower != None:
             #lower_int is the index of selected group, upper_int is the index above it
             lower_int = lower[0]
@@ -170,7 +170,7 @@ def main():
                 listbox_update_selection("Group", upper_int)
     
     def move_group_down(upper):
-        """Move group down one step in listbox and json file."""
+        """Move group down one step in group_listbox and json file."""
         if upper != None:
             #upper_int is the index of selected group, lower_int is the index below it
             upper_int = upper[0]
@@ -199,7 +199,6 @@ def main():
                     listbox_update_selection("Group", len(groups)-2)
                     update_file_list()
 
-
     def remove_group(group):
         """Delete group along with its values."""
         if group != None:
@@ -215,10 +214,10 @@ def main():
                 update_file_list()
 
     def change_group_position(upper_int, lower_int):
-        """Swap positions of adjacent groups in listbox and json file."""
+        """Swap positions of adjacent groups in group_listbox and json file."""
         #Store all keys and corresponding values in temporary list
         temp_list = [[k,v] for k,v in groups.items()]
-        #Swap positions of upper index(upper_int+1) with lower index(lower_int+1)
+        #Swap positions of upper index (upper_int+1) with lower index (lower_int+1)
         temp_list[upper_int+1], temp_list[lower_int+1] = temp_list[lower_int+1], temp_list[upper_int+1]
         for t in temp_list:
             #Delete all keys and values in json and write new based on augmented list
@@ -228,7 +227,7 @@ def main():
         update_group_list()
 
     def sort_groups():
-        """Sort groups alphabetically in listbox and json file."""
+        """Sort groups alphabetically in group_listbox and json file."""
         #Stores the selected group
         group = get_group_selection()
         #Store all keys and corresponding values in temporary list, except for first key, which stores user settings
@@ -304,7 +303,7 @@ def main():
     file_listbox.place(x=326, y=70)
 
     def add_file(group):
-        """Add existing file or folder to current group."""
+        """Add existing file to currently selected group."""
         if get_group_selection() != None:
             filepath = filedialog.askopenfilename(initialdir=lastdir.get(), title="Select File", 
                                                 filetypes=[("All Files", "*.*")])
@@ -326,6 +325,7 @@ def main():
             messagebox.showerror("Error", "Select a group to add file to first!")
 
     def add_folder(group):
+        """Add existing folder to currently selected group."""
         if get_group_selection() != None:
             folderpath = filedialog.askdirectory(initialdir=lastdir.get(), title="Select Folder")
             if folderpath != "":
@@ -346,25 +346,39 @@ def main():
             messagebox.showerror("Error", "Select a group to add folder to first!")
 
     def move_file_up(lower, group):
+        """Move file or folder up one step in file_listbox and json file."""
         if lower != None and group != None:
+            #Do nothing if no folder or no file/folder is selected
+            #lower_int is the index of selected group, upper_int is the index above it
             lower_int = lower
             upper_int = lower_int-1
             if lower_int > 0:
+                #If selected file/folder is not already first
                 change_file_position(upper_int, lower_int, group)
+                #Set selection to index above original position
                 listbox_update_selection("Files", upper_int)
 
     def move_file_down(upper, group):
+        """Move file or folder down one step in file_listbox and json file."""
         if upper != None and group != None:
+            #Do nothing if no folder or no file/folder is selected
+            #upper_int is the index of selected group, lower_int is the index below it
             upper_int = upper
             lower_int = upper_int+1
             if upper_int < len(groups[group]) - 1:
+                #If selected file/folder is not already last
                 change_file_position(upper_int, lower_int, group)
+                #Set selection to index below original position
                 listbox_update_selection("Files", lower_int)
 
     def change_file_position(upper_int, lower_int, group):
+        """Swap positions of adjacent files/folders in file_listbox and json file."""
+        #Store all keys and corresponding values in temporary list
         temp_list = [[k,v] for k,v in groups[group].items()]
+        #Swap positions of upper index (upper_int) with lower index (lower_int)
         temp_list[upper_int], temp_list[lower_int] = temp_list[lower_int], temp_list[upper_int]
         for t in temp_list:
+            #Delete all keys and values in selected group and write new ones based on augmented list
             del groups[group][t[0]]
             groups[group][t[0]] = t[1] 
         write_json(groups)
