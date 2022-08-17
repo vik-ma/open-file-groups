@@ -110,53 +110,74 @@ def main():
     group_listbox.place(x=5, y=70)
 
     def add_group():
+        """Create new group."""
         new_group = askstring("New Group", "Name file group:")
         if new_group != None:
+            #If user did not cancel askstring
             if new_group in groups:
                 messagebox.showerror("Error", "A group with that name already exists!")
             else:
                 groups[new_group] = {}
                 write_json(groups)
                 update_group_list()
+                #Set the new group as current selection
                 current_group.set(new_group)
+                #Set the listbox selection as newly created group. Index of last item is len(groups)-2
                 listbox_update_selection("Group", len(groups)-2)
                 update_file_list()
 
     def rename_group(group):
+        """Rename existing group."""
         if group != None:
             index = get_group_index()[0]
             new_group = askstring("New Group", "Name file group:")
             if new_group != None:
+                #If user did not cancel askstring
                 if new_group in groups:
                     messagebox.showerror("Error", "A group with that name already exists!")
                 else:
+                    #Store all values in selected group to be renamed
                     storevalue = groups[group]
+                    #Store all keys/values in groups in a list
                     temp_list = [[k,v] for k,v in groups.items()]
                     for t in temp_list:
+                        #Delete key in groups to be renamed
                         del groups[t[0]]
                         if t[0] == group:
+                            #Create new key at same index as old key
+                            #Populate new key with values from old key
                             groups[new_group] = storevalue
                         else:
+                            #Fill other keys with same values as before
                             groups[t[0]] = t[1]
                     write_json(groups)
                     update_group_list()
+                    #Set selection to renamed group
                     current_group.set(new_group)
                     listbox_update_selection("Group", index)
 
     def move_group_up(lower):
+        """Move group up one step in listbox and json file."""
         if lower != None:
+            #lower_int is the index of selected group, upper_int is the index above it
             lower_int = lower[0]
             upper_int = lower_int-1
             if lower_int > 0:
+                #If selected group is not already first
                 change_group_position(upper_int, lower_int)
+                #Set selection to index above original position
                 listbox_update_selection("Group", upper_int)
     
     def move_group_down(upper):
+        """Move group down one step in listbox and json file."""
         if upper != None:
+            #upper_int is the index of selected group, lower_int is the index below it
             upper_int = upper[0]
             lower_int = upper_int+1
             if upper_int < len(groups) - 2:
+                #If selected group is not already last
                 change_group_position(upper_int, lower_int)
+                #Set selection to index below original position
                 listbox_update_selection("Group", lower_int)
 
     def copy_group(group):
