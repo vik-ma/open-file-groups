@@ -276,15 +276,18 @@ def main():
     #Bind mouseclicks onto group_listbox to group_listbox_on_select function
     group_listbox.bind('<<ListboxSelect>>', group_listbox_on_select)
 
-    def get_group_selection():
+    def get_group_selection() -> str:
+        """Return name selected group."""
         if group_listbox.curselection() != ():
             return group_listbox.get(group_listbox.curselection())    
 
-    def get_group_index():
+    def get_group_index() -> tuple:
+        """Return index of selected group in tuple form."""
         if group_listbox.curselection() != ():
             return group_listbox.curselection()
 
-    def get_file_selection():
+    def get_file_selection() -> int:
+        """Return index of selected file or folder."""
         if file_listbox.curselection() != ():
             return file_listbox.curselection()[0]
 
@@ -301,34 +304,45 @@ def main():
     file_listbox.place(x=326, y=70)
 
     def add_file(group):
+        """Add existing file or folder to current group."""
         if get_group_selection() != None:
             filepath = filedialog.askopenfilename(initialdir=lastdir.get(), title="Select File", 
                                                 filetypes=[("All Files", "*.*")])
             if filepath != "":
+                #Do nothing if no item was selected
                 get_filename = filepath.split("/")
+                #Sets shortened filepath to "{FILE-ROOT-FOLDER}/{FILENAME}"
                 filename = get_filename[-2]+"/"+get_filename[-1]
+                #Stores file in group with its key being the full filepath and its value as the shortened filepath
                 groups[group][filepath] = filename
+                #Stores the root directory of the file in lastdir
                 get_dir = filepath.rsplit("/",1)[0]
                 groups["_SETTINGS_"]["lastdir"] = get_dir
                 lastdir.set(get_dir)
                 write_json(groups)
                 update_file_list()
         else:
+            #Show error message if no group is selected
             messagebox.showerror("Error", "Select a group to add file to first!")
 
     def add_folder(group):
         if get_group_selection() != None:
             folderpath = filedialog.askdirectory(initialdir=lastdir.get(), title="Select Folder")
             if folderpath != "":
+                #Do nothing if no item was selected
                 get_foldername = folderpath.split("/")
+                #Sets shortened folderpath to "{FOLDERNAME} (Folder)"
                 foldername = f"{get_foldername[-1]} (Folder)"
+                #Stores folder in group with its key being the full folderpath and its value as the shortened folderpath
                 groups[group][folderpath] = foldername
                 get_dir = folderpath.rsplit("/",1)[0]
+                #Stores the root directory of the folder in lastdir
                 groups["_SETTINGS_"]["lastdir"] = get_dir
                 lastdir.set(get_dir)
                 write_json(groups)
                 update_file_list()
         else:
+            #Show error message if no group is selected
             messagebox.showerror("Error", "Select a group to add folder to first!")
 
     def move_file_up(lower, group):
