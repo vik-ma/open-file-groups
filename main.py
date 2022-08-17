@@ -201,7 +201,7 @@ def main():
 
 
     def remove_group(group):
-        """Delete group along with it's values."""
+        """Delete group along with its values."""
         if group != None:
             msgbox_warning = ""
             if remove_warn_group.get() is True:
@@ -540,7 +540,7 @@ def main():
     #Button for user to specify custom path to vlcrc file
     vlc_add_vlcrc_button = Button(text="Add Custom Path", command=lambda:[vlcrc_select_dir()])
     vlc_add_vlcrc_button.place(x=467, y=302)
-    #Button to set the path to vlcrc to it's default value
+    #Button to set the path to vlcrc to its default value
     vlc_restore_vlcrc_button = Button(text="Restore Default Path", command=lambda:[vlcrc_restore()])
     vlc_restore_vlcrc_button.place(x=577, y=302)
 
