@@ -122,13 +122,14 @@ def main():
                 update_group_list()
                 #Set the new group as current selection
                 current_group.set(new_group)
-                #Set the listbox selection as newly created group. Index of last item is len(groups)-2
+                #Set the listbox selection to newly created group. Index of last item is len(groups)-2
                 listbox_update_selection("Group", len(groups)-2)
                 update_file_list()
 
     def rename_group(group):
         """Rename existing group."""
         if group != None:
+            #Do nothing if no group is selected
             index = get_group_index()[0]
             new_group = askstring("New Group", "Name file group:")
             if new_group != None:
@@ -181,24 +182,30 @@ def main():
                 listbox_update_selection("Group", lower_int)
 
     def copy_group(group):
+        """Copy values of selected group to new group."""
         if group != None:
             new_group = askstring("Copy Group", "Name file group:")
             if new_group != None:
+                #If user did not cancel askstring
                 if new_group in groups:
                     messagebox.showerror("Error", "A group with that name already exists!")
                 else:
+                    #Copy values from selected group to new group
                     groups[new_group] = groups[group]
                     write_json(groups)
                     update_group_list()
                     current_group.set(new_group)
+                    #Set the listbox selection to newly created group. Index of last item is len(groups)-2
                     listbox_update_selection("Group", len(groups)-2)
                     update_file_list()
 
 
     def remove_group(group):
+        """Delete group along with it's values."""
         if group != None:
             msgbox_warning = ""
             if remove_warn_group.get() is True:
+                #Send warning messagebox before deleting if remove_warn_group is set to True
                 msgbox_warning = messagebox.askquestion("Warning", f"Do you really want to delete {group}?")
             if msgbox_warning == "yes" or remove_warn_group.get() is False:
                 del groups[group]
@@ -208,45 +215,65 @@ def main():
                 update_file_list()
 
     def change_group_position(upper_int, lower_int):
+        """Swap positions of adjacent groups in listbox and json file."""
+        #Store all keys and corresponding values in temporary list
         temp_list = [[k,v] for k,v in groups.items()]
+        #Swap positions of upper index(upper_int+1) with lower index(lower_int+1)
         temp_list[upper_int+1], temp_list[lower_int+1] = temp_list[lower_int+1], temp_list[upper_int+1]
         for t in temp_list:
+            #Delete all keys and values in json and write new based on augmented list
             del groups[t[0]]
             groups[t[0]] = t[1] 
         write_json(groups)
         update_group_list()
 
     def sort_groups():
+        """Sort groups alphabetically in listbox and json file."""
+        #Stores the selected group
         group = get_group_selection()
+        #Store all keys and corresponding values in temporary list, except for first key, which stores user settings
         temp_list = [[k,v] for k,v in groups.items()][1::]
         if temp_list != [] and group != "None":
+            #Do nothing if no items to sort
+            #Sort all keys in list alphabetically
             sorted_list = sorted(temp_list, key=get_key)
             for t in temp_list:
+                #Delete all keys and values in json
                 del groups[t[0]]
             index = 0
             for i, s in enumerate(sorted_list):
+                #Rewrite json with keys and values of sorted_list
                 groups[s[0]] = s[1]
                 if s[0] == group:
+                    #Gets new index of selected group
                     index = i
             write_json(groups)
             update_group_list()
             if group != None:
+                #Set current group selection to same selection as before
                 listbox_update_selection("Group", index)
 
     def update_group_list():
+        """Populate group_list with every item in groups except first key in json."""
         group_list.set([group for group in groups][1::])
 
     def group_listbox_on_select(event):
+        """List all values of group in file_listbox when clicked on."""
         e = event.widget
         if e.curselection() != ():
             #Doesn't cause error if you click on a askstring dialog box
+            #Set selected group to group that was clicked on 
             group = e.get(e.curselection())
             if toggle_filepath_state.get() is True:
+                #Show full filepath if toggle_filepath_state is True
                 file_list.set([k for k, v in groups[group].items()])
             else:
+                #Show shortened filepath names if False
                 file_list.set([v for k, v in groups[group].items()])
+            #Set selected group to group that was clicked on
             current_group.set(e.get(e.curselection()))
 
+    #Bind mouseclicks onto group_listbox to group_listbox_on_select function
     group_listbox.bind('<<ListboxSelect>>', group_listbox_on_select)
 
     def get_group_selection():
