@@ -4,6 +4,7 @@ from tkinter.simpledialog import askstring
 import pathlib
 import os
 import json
+from xmlrpc.client import boolean
 
 DESKTOP = pathlib.Path.home() / 'Desktop'
 HOMEFOLDER = pathlib.Path.home()
@@ -434,7 +435,7 @@ def main():
         return list[1].lower()
 
     def listbox_update_selection(list_type, index):
-        """Select index specified parameter in listbox specified by parameter."""
+        """Select index specified by parameter in listbox specified by parameter."""
         if list_type == "Group":
             group_listbox.select_clear(0, tk.END)
             group_listbox.select_set(index)
@@ -576,7 +577,7 @@ def main():
     #Buttons to change settings in vlcrc file
     vlc_pause_on_button = Button(text="Turn On", command=lambda:[vlc_button_command(vlc_paused, 1, 0)], font="segoeui 8")
     vlc_pause_off_button = Button(text="Turn Off", command=lambda:[vlc_button_command(vlc_paused, 0, 1)], font="segoeui 8")
-
+    
     vlc_multiple_on_button = Button(text="Turn On", command=lambda:[vlc_button_command(vlc_mult_inst, 1, 0)], font="segoeui 8")
     vlc_multiple_off_button = Button(text="Turn Off", command=lambda:[vlc_button_command(vlc_mult_inst, 0, 1)], font="segoeui 8")
 
@@ -601,27 +602,38 @@ def main():
     vlc_restore_vlcrc_button = Button(text="Restore Default Path", command=lambda:[vlcrc_restore()])
     vlc_restore_vlcrc_button.place(x=577, y=302)
 
-    def check_vlcrc(path):
+    def check_vlcrc(path) -> boolean:
+        """
+        Check if valid vlcrc file exists in given path.
+        
+        Returns True if path exists and file is named "vlcrc". Otherwise False.
+        """
         if pathlib.Path(path).exists() and path[-5::] == "vlcrc":
+            #Checks if the path to file is valid and that the file is named "vlcrc"
             return True
         return False
 
     def check_vlrc_exists():
+        """Display result of check_vlcrc function in messagebox."""
         if check_vlcrc(vlcrcpath.get()):
             messagebox.showinfo("VLC Settings File", "VLC Settings File exists in current directory.")
         else:
             messagebox.showinfo("VLC Settings File", "VLC Settings File does not exist in current directory.\nClick Add Custom Path to manually locate 'vlcrc' file.")
 
     def change_vlcrc_settings(path, setting, newvalue, oldvalue):
+        """Change specified setting in vlcrc file from specified old value to specified new value."""
         try:
+            #Convert settings to string used in vlcrc file
             newsetting = setting+str(newvalue)
             oldsetting = setting+str(oldvalue)
             with open (path, "r") as f:
                 lines = []
                 for f in f.readlines():
-                    lines.append(f.replace(oldsetting,newsetting))
+                    #Read all lines in vlcrc file to 'lines' and replace line containing old setting with new setting
+                    lines.append(f.replace(oldsetting, newsetting))
             with open (path, "w") as f:
                 for line in lines:
+                    #Write all lines back to vlcrc file but with swapped setting value 
                     f.writelines(line)
         except:
             messagebox.showerror("Error", "VLC settings file can not be read or modified!")
