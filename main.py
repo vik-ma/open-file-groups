@@ -495,7 +495,7 @@ def main():
         else:
             toggle_filepath_button_text.set("Toggle Full Filepaths")
 
-    #Function to set text of toggle_filepath_button from settings when application is launched
+    #Set text of toggle_filepath_button from settings when application is launched
     show_filepath_button(toggle_filepath_state.get())
 
     toggle_filepath_button = Button(textvariable=toggle_filepath_button_text, command=lambda:[toggle_filepath()])
@@ -529,26 +529,31 @@ def main():
                     group_listbox.select_set(index)
             update_file_list()
 
+    #Sets saved group from settings when application is launched
     select_saved_group()
 
     def open_files():
+        """Open all files and folders saved to selected group."""
         group = current_group.get()
         if group != "None" and group != "":
             if len(groups[group]) > 0:
+                #Do nothing if no items added to group
                 for k, v in groups[group].items():
                     try:
                         os.startfile(k)
                     except:
                         messagebox.showerror("Error", f"Cannot open {k}!")
                 if autoclose.get() is True:
+                    #Save current checkbox states and close then application if autoclose boolean is True 
                     check_checkboxes()
         else:
+            #If no group is selected
             messagebox.showerror("Error", "Must select a group to open from!")    
 
+    #VLC Media Player Settings section
     vlc_settings_title_label = Label(text="VLC Media Player Settings", font="arial 13 bold", fg="#fc8c03")
     vlc_settings_title_label.place(x=4, y=303)
     
-
     show_vlcrc_path = StringVar(value=f"VLC Settings file: {vlcrcpath.get()}")
     #Label that shows the current set path to VLC Settings file (vlcrc)
     vlcrc_path_label = Label(textvariable=show_vlcrc_path, font="arial 8 bold")
@@ -558,7 +563,7 @@ def main():
     vlc_settings_desc_label = Label(text="When opening media files in VLC Media Player, it is recommended to\nstart the media files paused and to allow more than one instance of\nVLC Media Player to be active. You can turn these features on or off here.", justify="left")
     vlc_settings_desc_label.place(x=4, y=346)
 
-    #Lines/values in vlcrc-file which corresponds to their settings
+    #Strings whose values corresponds to their settings in vlcrc-file
     vlc_paused = "start-paused="
     vlc_mult_inst = "one-instance-when-started-from-file="
 
@@ -580,7 +585,7 @@ def main():
     vlc_multiple_on_button.place(x=595, y=370)
     vlc_multiple_off_button.place(x=645, y=370)
 
-    #Buttons to check specific values of settings in vlcrc file
+    #Buttons to check specific value of settings in vlcrc file
     vlc_check_pause_button = Button(text="Check", command=lambda:[vlc_button_command(vlc_paused)], font="segoeui 8")
     vlc_check_pause_button.place(x=554, y=343)
     vlc_check_multiple_button = Button(text="Check", command=lambda:[vlc_button_command(vlc_mult_inst)], font="segoeui 8")
