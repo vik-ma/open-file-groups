@@ -485,26 +485,31 @@ def main():
     sort_files_button = Button(text="Sort Files/Folders Alphabetically", command=lambda:[sort_files()])
     sort_files_button.place(x=326, y=237)
 
+    #Variable to store text for toggle_filepath_button
     toggle_filepath_button_text = StringVar()
 
     def show_filepath_button(state):
+        """Change text of toggle_filepath_button based on parameter."""
         if state is True:
             toggle_filepath_button_text.set("Toggle Shorter Filepaths")
         else:
             toggle_filepath_button_text.set("Toggle Full Filepaths")
 
+    #Function to set text of toggle_filepath_button from settings when application is launched
     show_filepath_button(toggle_filepath_state.get())
 
     toggle_filepath_button = Button(textvariable=toggle_filepath_button_text, command=lambda:[toggle_filepath()])
     toggle_filepath_button.place(x=509, y=237)
 
     def toggle_filepath():
+        """Change boolean value of toggle_filepath_state, update file_listbox accordingly and write setting to json."""
         new_state = toggle_filepath_state.get()
         if new_state is True:
             new_state = False
         else:
             new_state = True
         toggle_filepath_state.set(new_state)
+        #Update text to toggle_filepath_button
         show_filepath_button(new_state)
         groups["_SETTINGS_"]["show_full_filepath"] = new_state
         write_json(groups)
@@ -515,12 +520,13 @@ def main():
     open_button.place(x=570, y=3)
 
     def select_saved_group():
+        """Set value for key 'saved_group' in json as selection in group_listbox."""
         if current_group.get() != None or current_group.get() != "None":
-            index = -1
-            for group in groups:
+            #Do nothing if no group is saved
+            for index, group in enumerate(groups, start=-1):
+                #Index starts at -1 because first group is "_SETTINGS_"
                 if group == current_group.get():
                     group_listbox.select_set(index)
-                index += 1
             update_file_list()
 
     select_saved_group()
