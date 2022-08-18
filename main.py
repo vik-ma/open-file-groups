@@ -249,7 +249,7 @@ def main():
             write_json(groups)
             update_group_list()
             if group != None:
-                #Set current group selection to same selection as before
+                #Set current group selection to same group as before
                 listbox_update_selection("Group", index)
 
     def update_group_list():
@@ -417,13 +417,24 @@ def main():
                 #Set file_list as empty list if no items in selected group
                 file_list.set([])
 
-    def get_key(list):
+    def get_key(list) -> str:
+        """
+        Return lowercase string of index 0 in a list.
+        
+        The list parameter will be a dictionary converted to a list and index 0 will represent the keys.
+        """
         return list[0].lower()
 
-    def get_value(list):
+    def get_value(list) -> str:
+        """
+        Return lowercase string of index 1 in a list.
+
+        The list parameter will be a dictionary converted to a list and index 1 will represent the value.
+        """
         return list[1].lower()
 
     def listbox_update_selection(list_type, index):
+        """Select index specified parameter in listbox specified by parameter."""
         if list_type == "Group":
             group_listbox.select_clear(0, tk.END)
             group_listbox.select_set(index)
@@ -432,24 +443,34 @@ def main():
             file_listbox.select_set(index)
 
     def sort_files():
+        """Sort groups alphabetically in file_listbox and within group key in json file."""
         group = get_group_selection()
         if group != "None" and group != None:
+            #Do nothing if no items to sort and if no group is selected
+            #Store all keys and corresponding values within group in temporary list
             temp_list = [[k,v] for k,v in groups[group].items()]
             if temp_list != []:
+                #Do nothing if group is empty
+                #Sort all values in list alphabetically
                 sorted_list = sorted(temp_list, key=get_value)
                 selected_file = ""
                 for i, t in enumerate(temp_list):
+                    #Delete all keys and values within group
                     del groups[group][t[0]]
                     if i == get_file_selection():
+                        #Get the key of the currently selected file/folder
                         selected_file = t[0]
                 index = 0
                 for i, s in enumerate(sorted_list):
+                    #Rewrite group with keys and values of sorted_list
                     groups[group][s[0]] = s[1]
                     if selected_file == s[0]:
+                        #Gets new index of selected file/folder
                         index = i
                 write_json(groups)
                 update_file_list()
                 if get_file_selection() != None:
+                    #Set file/folder selection to same file/folder as before
                     listbox_update_selection("Files", index)
 
     warn_group_checkbox = Checkbutton(text="Warn before trying to delete group", variable=remove_warn_group, onvalue=True, offvalue=False)
