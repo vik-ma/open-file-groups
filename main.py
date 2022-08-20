@@ -4,7 +4,6 @@ from tkinter.simpledialog import askstring
 import pathlib
 import os
 import json
-from xmlrpc.client import boolean
 
 DESKTOP = pathlib.Path.home() / 'Desktop'
 HOMEFOLDER = pathlib.Path.home()
@@ -602,7 +601,7 @@ def main():
     vlc_restore_vlcrc_button = Button(text="Restore Default Path", command=lambda:[vlcrc_restore()])
     vlc_restore_vlcrc_button.place(x=577, y=302)
 
-    def check_vlcrc(path) -> boolean:
+    def check_vlcrc(path) -> bool:
         """
         Check if valid vlcrc file exists in given path.
         
