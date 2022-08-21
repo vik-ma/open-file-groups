@@ -332,7 +332,11 @@ def main():
                 #Do nothing if no item was selected
                 get_foldername = folderpath.split("/")
                 #Sets shortened folderpath to "{FOLDERNAME} (Folder)"
-                foldername = f"{get_foldername[-1]} (Folder)"
+                if get_foldername[1] == "":
+                    #If selected folder is root folder of harddrive
+                    foldername = f"{get_foldername[0]} (Folder)"
+                else:
+                    foldername = f"{get_foldername[-1]} (Folder)"
                 #Stores folder in group with its key being the full folderpath and its value as the shortened folderpath
                 groups[group][folderpath] = foldername
                 get_dir = folderpath.rsplit("/",1)[0]
