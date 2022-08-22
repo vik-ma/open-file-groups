@@ -739,14 +739,22 @@ if __name__ == "__main__":
         #Create json file with default settings, then launch application GUI
         vlcrc = f"{HOMEFOLDER}\\AppData\\Roaming\\vlc\\vlcrc"
         settings = {
+            #Setting to display full path of added file/folder if True or shortened path if False
             "show_full_filepath": True,
+            #Directory of last chosen file/folder
             "lastdir": str(DESKTOP),
+            #Path to vlc settings file
             "vlcrc_path": vlcrc,
+            #Group to be automatically selected at launch if save_group is True
             "saved_group": "None",
+            #Setting to automatically select saved group at application launch if True
             "save_group": False,
+            #Closes program after opening group of files/folders if True
             "autoclose": False,
+            #Removes warning before trying to delete groups if True
             "remove_warn_group": False,
-            "remove_warn_files": True
+            #Removes warning before trying to delete files/folder in group if True
+            "remove_warn_files": False
             }
         json_content = {"_SETTINGS_":settings}
         write_json(json_content)
