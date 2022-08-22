@@ -642,28 +642,33 @@ def main():
             messagebox.showerror("Error", "VLC settings file can not be read or modified!")
 
     def check_vlcrc_settings(path, setting):
+        """Display value for specified setting in vlcrc file."""
         try:
             with open (path, "r") as f:
                 for f in f.readlines():
                     if setting in f:
+                        #Line of specified setting
                         value = f
+            #Get only the value, which is the last character of the line
             value = value.strip()[-1]
             match setting:
+                #Replace the setting variable with text to be displayed in messagebox
                 case "start-paused=":
                     setting_str = "Start Paused"
                 case "one-instance-when-started-from-file=":
                     setting_str = "Allow Only One Instance"
             match value:
+                #Replace "0"/"1" with "ON"/"OFF" to be displayed in messagebox
                 case "1":
                     value_str = "ON"
                 case "0":
                     value_str = "OFF"
             messagebox.showinfo("Check Setting", f"{setting_str} is turned {value_str}.")
-
         except:
             messagebox.showerror("Error", "VLC settings file can not be read!")
 
     def vlcrc_select_dir():
+        """Set user specified path as path to vlcrc file."""
         filepath = filedialog.askopenfilename(initialdir="/", title="Select vlcrc File", 
                                                 filetypes=[("All Files", "*.*")])
         if filepath != "":
@@ -673,6 +678,7 @@ def main():
             write_json(groups)
     
     def vlcrc_restore():
+        """Restore path to vlcrc file to default path."""
         msgbox_warning = messagebox.askquestion("Warning", f"Do you really want to restore default vlcrc path?")
         if msgbox_warning == "yes":
             default_path = f"{HOMEFOLDER}\\AppData\\Roaming\\vlc\\vlcrc"
@@ -682,11 +688,15 @@ def main():
             write_json(groups)
 
     def vlc_button_command(setting, newvalue=None, oldvalue=None):
+        """Interact with specified setting in vlcrc file based on arguments."""
         path = vlcrcpath.get()
         if check_vlcrc(path):
+            #If file exists in path
             if newvalue != None:
+                #Change specified setting in vlcrc file to new value
                 change_vlcrc_settings(path, setting, newvalue, oldvalue)
             else:
+                #Check value of specified setting in vlcrc file
                 check_vlcrc_settings(path, setting)
         else:  
             messagebox.showerror("Error", "VLC settings file not found!\nClick Add Custom Path to manually select VLC settings file.")
@@ -705,23 +715,28 @@ def main():
         close()
 
     def close():
+        """Close application."""
         if save_group.get() is True:
+            #Save current group in json if save_group_checkbox is checked when application is closed
             groups["_SETTINGS_"]["saved_group"] = current_group.get()
         else:
             groups["_SETTINGS_"]["saved_group"] = "None"
         write_json(groups)
         root.destroy()    
 
+    #Call check_checkboxes function before application is closed
     root.protocol("WM_DELETE_WINDOW", lambda:[check_checkboxes()])
 
     root.mainloop()
 
 if __name__ == "__main__":
     if has_json:
+        #Read json file if it exists, then launch application GUI
         with open ("saved_groups.json", "r", encoding="utf-8") as file:
             groups = json.load(file)
         main()
     else:
+        #Create json file with default settings, then launch application GUI
         vlcrc = f"{HOMEFOLDER}\\AppData\\Roaming\\vlc\\vlcrc"
         settings = {
             "show_full_filepath": True,
