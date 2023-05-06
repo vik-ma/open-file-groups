@@ -18,6 +18,7 @@ def write_json(write_to_json):
 def main():
     """Construct the GUI for the application."""
     root = tk.Tk()
+    root.iconphoto(False, tk.PhotoImage(file="file_opener-icon.png"))
     root.title("Open Group Of Files")
 
     #Create 700x400 unresizable GUI roughly in the middle of the screen (80px north of center)
