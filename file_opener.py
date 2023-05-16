@@ -291,12 +291,12 @@ def main():
         if file_listbox.curselection() != ():
             return file_listbox.curselection()[0]
 
+    #Label to show currently selected group
+    current_group_label = Label(textvariable=current_group, font="arial 13 bold", fg="#1b76ff")
+    current_group_label.place(x=324, y=44)
     #Title label for file_listbox
     selected_group_label = Label(text="Selected Group:", font="arial 13 bold")
     selected_group_label.place(x=323, y=24)
-    #Label to show currently selected group
-    current_group_label = Label(textvariable=current_group, font="arial 13 bold", fg="#166edb")
-    current_group_label.place(x=324, y=44)
 
     file_list = StringVar()
     #Listbox to list all saved files and folders in currently selected group
@@ -520,9 +520,9 @@ def main():
         write_json(groups)
         update_file_list()
 
-    open_button = Button(text="Open Files", bg="#3599e6", fg="#1c1c1c", 
+    open_button = Button(text="Open Files", bg="#1b76ff", fg="#f7f7f7", 
                             font="arial 16 bold", command=lambda:[open_files()])
-    open_button.place(x=570, y=3)
+    open_button.place(x=569, y=4)
 
     def select_saved_group():
         """Set value for key 'saved_group' in json as selection in group_listbox."""
