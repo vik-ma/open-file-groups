@@ -7,6 +7,7 @@ import json
 
 DESKTOP = pathlib.Path.home() / 'Desktop'
 HOMEFOLDER = pathlib.Path.home()
+ICON_FILE_NAME = "file_opener-icon.png"
 
 has_json = pathlib.Path("saved_groups.json").exists()
 
@@ -18,8 +19,11 @@ def write_json(write_to_json):
 def main():
     """Construct the GUI for the application."""
     root = tk.Tk()
-    root.iconphoto(False, tk.PhotoImage(file="file_opener-icon.png"))
     root.title("Open Group Of Files")
+
+    # Add Icon to Window if Icon file exists
+    if os.path.exists(ICON_FILE_NAME):
+        root.iconphoto(False, tk.PhotoImage(file=ICON_FILE_NAME))
 
     #Create 700x400 unresizable GUI roughly in the middle of the screen (80px north of center)
     w = 700
