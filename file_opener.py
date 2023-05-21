@@ -524,7 +524,7 @@ def main():
         write_json(groups)
         update_file_list()
 
-    open_button = Button(text="Open Files", bg="#1b76ff", fg="#f7f7f7", 
+    open_button = Button(text="Open Files", bg="#1b76ff", fg="#fefefe", 
                             font="arial 16 bold", command=lambda:[open_files()])
     open_button.place(x=569, y=4)
 
