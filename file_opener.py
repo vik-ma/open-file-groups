@@ -116,7 +116,7 @@ def main():
 
     def add_group():
         """Create new group."""
-        new_group = askstring("New Group", "Name file group:")
+        new_group = askstring("New Group", "Name new file group:")
         if new_group != None:
             #If user did not cancel askstring
             if new_group in groups:
@@ -189,7 +189,7 @@ def main():
     def copy_group(group):
         """Copy values of selected group to new group."""
         if group != None:
-            new_group = askstring("Copy Group", "Name file group:")
+            new_group = askstring("Copy Group", "Name new file group:")
             if new_group != None:
                 #If user did not cancel askstring
                 if new_group in groups:
