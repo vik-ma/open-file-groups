@@ -3,6 +3,7 @@
 
 The application was made with Python and Tkinter, and requires Python to run.
 
+![Preview Picture](file-opener-preview.jpg)
 ## Features
 
 - Save a group of files or folders to be simultaneously opened
@@ -30,4 +31,4 @@ By default, the VLC Media Player settings is located in *'C:\Users\\%USER%\AppDa
 
 ## Saved Groups and Configuration
 
-Saved groups and user configuration is stored in a 'saved_groups.json' file that gets automatically created in the same directory as the 'file_opener.py' file when it's run for the first time.
+Saved groups and user configuration is stored in a *'saved_groups.json'* file that gets automatically created in the same directory as the *'file_opener.py'* file when it's run for the first time.
