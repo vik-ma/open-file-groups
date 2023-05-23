@@ -3,7 +3,7 @@
 
 The application was made with Python and Tkinter, and requires Python to run.
 
-![Preview Picture](file-opener-preview.jpg)
+![Preview Picture](file-opener-preview.png)
 ## Features
 
 - Save a group of files or folders to be simultaneously opened
