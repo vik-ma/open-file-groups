@@ -19,7 +19,7 @@ def write_json(write_to_json):
 def main():
     """Construct the GUI for the application."""
     root = tk.Tk()
-    root.title("Open Group Of Files")
+    root.title("Open File Groups")
 
     # Add Icon to Window if Icon file exists
     if os.path.exists(ICON_FILE_NAME):
